@@ -4,6 +4,7 @@
 // 2. Wyłączania alarmu
 
 #include <stdio.h>
+#include <string.h>
 
 int main(void){
     while (1){
@@ -48,6 +49,8 @@ int main(void){
             break;
         }
         
-        
+       
     }
+
+     return 0;
 }
