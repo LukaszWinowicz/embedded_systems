@@ -3,15 +3,17 @@
 // 1. Ustawienia godziny o której ma wystąpić alarm
 // 2. Wyłączania alarmu
 
+#include <pthread.h>
 #include <stdio.h>
-#include <string.h>
+#include <unistd.h>
 #include <time.h>
+#include <string.h>
 
 int minute = -1;
 int hour = -1;
 int done;
 
-void *alerm_thread(void *arg)
+void *alarm_thread(void *arg)
 {    
     while (1)
     {
@@ -37,6 +39,12 @@ void *alerm_thread(void *arg)
 
 int main(void)
 {
+    pthread_t thread;
+    
+    int ret = pthread_create(&thread, NULL, alarm_thread, NULL);
+    if (ret)
+        return -1;
+        
     while (1)
     {
         printf("> ");
@@ -93,5 +101,10 @@ int main(void)
             break;
         }
     }
+
+    done = 1;
+
+    pthread_join(thread, NULL);
+
     return 0;
 }
