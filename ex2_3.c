@@ -7,12 +7,38 @@
 #include <string.h>
 #include <time.h>
 
-int main(void){
+int minute = -1;
+int hour = -1;
+int done;
 
-    int minute = -1;
-    int hour = -1;
-    while (1){
+void *alerm_thread(void *arg)
+{    
+    while (1)
+    {
+        sleep(1);
 
+        if (done)
+        {
+            break;
+        }
+
+        struct tm tm;
+        time_t t = time(NULL);
+        localtime_r(&t, &tm);
+
+        if (minute == tm.tm_min && hour == tm.tm_hour) {
+            printf("<<ALARM>>\n");
+            minute = -1;
+            hour = -1;
+        }        
+    }
+    return NULL;
+}
+
+int main(void)
+{
+    while (1)
+    {
         printf("> ");
 
         char line[80];
@@ -37,32 +63,35 @@ int main(void){
         (np. %d dla liczby całkowitej, %f dla liczby zmiennoprzecinkowej itp.).
         ...: Dodatkowe argumenty, które są wskaźnikami na zmienne, do których wczytane zostaną dane zgodnie
         z określonym formatem.*/
-        if (sscanf(line, "set %d:%d", &h, &m) == 2){
+        if (sscanf(line, "set %d:%d", &h, &m) == 2)
+        {
             minute = m;
             hour = h;
         }    
 
         /*strcmp to funkcja w języku C, która służy do porównywania dwóch ciągów znaków.*/
-        if (strcmp("clear\n", line) == 0){
+        if (strcmp("clear\n", line) == 0)
+        {
             minute = -1;
             hour = -1;
         }
 
-        if (strcmp("get\n", line) == 0){
-            if (minute < 0 || hour < 0){
+        if (strcmp("get\n", line) == 0)
+        {
+            if (minute < 0 || hour < 0)
+            {
                 printf("alarm is not set\n");
             }
-            else {
+            else 
+            {
                 printf("%02d:%02d\n", hour, minute);
             }
         }
 
-        if (strcmp("exit\n", line) == 0){
+        if (strcmp("exit\n", line) == 0)
+        {
             break;
         }
-        
-       
     }
-
-     return 0;
+    return 0;
 }
