@@ -10,12 +10,19 @@ H:M Text - dodawanie przypomnień.*/
 
 int main(void)
 {
-    char line[5][48];
+    char reminders[5][48];
+    while (1)     
+    {
+	    printf("> ");
+        char line[48];
+        fgets(line, sizeof(line), stdin);
+
+        printf("%s\n", line);
+
+        if (strcmp("exit\n", line) == 0) {
+		break;
+	    }
+    }
     
-    printf("Podaj wartosc do pierwsszego wiersza: ");
-    fgets(line[0], sizeof(line[0]), stdin);
-
-    printf("Pierwszy wiersz: %s", line[0]);
-
     return 0;
 }
