@@ -5,9 +5,14 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 int main(void){
+
+    int minute = -1;
+    int hour = -1;
     while (1){
+
         printf("> ");
 
         char line[80];
@@ -33,16 +38,23 @@ int main(void){
         ...: Dodatkowe argumenty, które są wskaźnikami na zmienne, do których wczytane zostaną dane zgodnie
         z określonym formatem.*/
         if (sscanf(line, "set %d:%d", &h, &m) == 2){
-            /* Ustaw czas*/
+            minute = m;
+            hour = h;
         }    
 
         /*strcmp to funkcja w języku C, która służy do porównywania dwóch ciągów znaków.*/
         if (strcmp("clear\n", line) == 0){
-            /* Wyczyść czas */
+            minute = -1;
+            hour = -1;
         }
 
         if (strcmp("get\n", line) == 0){
-            /* Wyświetl ustawiony czas */
+            if (minute < 0 || hour < 0){
+                printf("alarm is not set\n");
+            }
+            else {
+                printf("%02d:%02d\n", hour, minute);
+            }
         }
 
         if (strcmp("exit\n", line) == 0){
