@@ -10,10 +10,9 @@ H:M Text - dodawanie przypomnień.*/
 
 // zainicjalizowanie pustej tablicy
 char reminders[5][8] = {};
-
 int main(void)
 {
-   
+   int counter = 0;
     while (1)     
     {         
 	    printf("> ");
@@ -24,6 +23,7 @@ int main(void)
             break;
 
         int hours, minutes;
+        char hoursStr[3], minutesStr[3];
         char text[8];
 
         if (strcmp("exit\n", line) == 0) {
@@ -39,18 +39,28 @@ int main(void)
                 }      
             }                  
 	    }
-
-        if (sscanf(line, "%d:%d%*1[ ]%[^\n]", &hours, &minutes, text) == 3) {
-            for (int i = 0; i < 5; i++)
+        
+        if (sscanf(line, "%02s:%02s%*1[ ]%[^\n]", &hours, &minutes, text) == 3 && strlen(hoursStr) == 2 && strlen(minutesStr) == 2) 
+        {            
+            if(counter <= 5)
             {
-                if (reminders[i][0] == '\0' || reminders[i][0] == '\n')
+                for (int i = 0; i < 5; i++)
                 {
-                    printf("Dodano przypomnienie\n");
-                    strcpy(reminders[i], line);
-                    break;
+                    if (reminders[i][0] == '\0' || reminders[i][0] == '\n')
+                     {
+                        printf("Added to reminder list.\n");
+                        strcpy(reminders[i], line);
+                        counter++;
+                        break;
+                    }
                 }
             }
+            else
+            {
+                printf("Reminder list is at this moment full.\n");
+            }
         }
+       // printf("counter: %d\n", counter);
     }
     
     return 0;
@@ -58,5 +68,7 @@ int main(void)
 
 /*UWAGI
 1. format zapisu do tablicy, co jest nie tak
-2. format odczytu informacji po godzinie, powinno brać po uwagę spację (roziązane przez: "%d:%d%*1[ ]%[^\n]")
++ 2. format odczytu informacji po godzinie, powinno brać po uwagę spację (roziązane przez: "%d:%d%*1[ ]%[^\n]")
+3. zabezpiecznie wpisywania formatu czasu HH:MM
+4. zabezpiecznie zakresu 00:00 -> 24:00
 */
