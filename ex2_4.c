@@ -20,7 +20,7 @@ int main(void)
 
         char line[8];
         
-          if(!fgets(line, sizeof(line), stdin))
+        if(!fgets(line, sizeof(line), stdin))
             break;
 
         int hours, minutes;
@@ -30,23 +30,23 @@ int main(void)
 		break;
 	    }
 
-        if (strcmp("list\n", line) == 0) {
+        if (strcmp("list\n", line) == 0) {            
             for (int i = 0; i < 5; i++)
             {
-                printf("%s", reminders[i]);
-            }
-            
+                if(reminders[i] != NULL)
+                {
+                    printf("%s", reminders[i]);
+                }      
+            }                  
 	    }
 
-        if (sscanf(line, "%d:%d %[^\n]", &hours, &minutes, text) == 3) {
+        if (sscanf(line, "%d:%d%*1[ ]%[^\n]", &hours, &minutes, text) == 3) {
             for (int i = 0; i < 5; i++)
             {
                 if (reminders[i][0] == '\0' || reminders[i][0] == '\n')
                 {
-                    //printf("Długość wiersza w linee: %zu\n", strlen(line));
+                    printf("Dodano przypomnienie\n");
                     strcpy(reminders[i], line);
-                    //printf("Dodano dane do reminders[%d]: %s\n", i, reminders[i]);
-                    //printf("Długość wiersza w reminders[%d]: %zu\n", i, strlen(reminders[i]));
                     break;
                 }
             }
@@ -55,3 +55,8 @@ int main(void)
     
     return 0;
 }
+
+/*UWAGI
+1. format zapisu do tablicy, co jest nie tak
+2. format odczytu informacji po godzinie, powinno brać po uwagę spację (roziązane przez: "%d:%d%*1[ ]%[^\n]")
+*/
