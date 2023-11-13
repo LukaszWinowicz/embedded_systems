@@ -92,7 +92,7 @@ void parseInput(char *line, int *counter) {
         return;
     }
 
-    if (sscanf(line, "%2d:%2d %[^\n]", &hours, &minutes, text) == 3 && hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+    if (sscanf(line, "%2d:%2d%*1[ ]%[^\n]", &hours, &minutes, text) == 3 && hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
         addReminder(text, hours, minutes, counter);
     } else {
         printf("Invalid format or time values.\n");
