@@ -1,16 +1,57 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <time.h>
 #include <string.h>
+#include <stdlib.h>
+
+#define MAX_LINE_LENGTH 10
+
+char reminders[5][MAX_LINE_LENGTH] = {};
+int minutes = -1;
+int hours = -1;
+int done;
+int minutes_a = -1;
+int hours_a = -1;
+pthread_mutex_t lock;
 
 void *thread_function(void *arg)
 {
-    sleep(1);
-    printf("second thread\n");
+    while (1) {
+        
+        sleep(1);
+        struct tm tm;
+        time_t t = time(NULL);
+        localtime_r(&t, &tm);
+
+        pthread_mutex_lock(&lock);
+        for (int i = 0; i < 5; i++)
+        {
+            sscanf(reminders[i], "%2d", &hours_a);
+            sscanf(reminders[i], "%*3c%2d", &minutes_a);
+            if (minutes_a == tm.tm_min && hours_a == tm.tm_hour) {
+
+                printf("<<ALARM>>\n");
+                printf("Hours: %d, Minutes: %d\n", hours_a, minutes_a);
+                printf("%s\n", reminders[i]);
+
+                // Wyczyść wpis po aktywacji alarmu
+                memset(reminders[i], 0, sizeof(reminders[i]));
+
+                // Resetuj zmienne pomocnicze
+                minutes_a = -1;
+                hours_a = -1;
+                
+            }           
+        }
+        pthread_mutex_unlock(&lock);
+       
+    }
+
     return NULL;
 }
 
-int main(void)
+int main(void) 
 {
     pthread_t thread;
     int ret = pthread_create(&thread, NULL, thread_function, NULL);
@@ -18,63 +59,63 @@ int main(void)
         fprintf(stderr, "pthread_create failed with %d\n", ret);
         return 1;
     }
+// -------------------------------------------
+    int counter = 0;
+    printf("Enter the data in the format 'HH:MM reminder message': \n");
 
-    /* Pętla z interfejsem użytkownika, wykonywana w wątku głównym */
     while (1) {
-        /* Znak zachęty */
+        char line[MAX_LINE_LENGTH] = {};
         printf("> ");
-
-        /* Odczytywanie linii - maksymalnie wspieramy 80 znaków */
-        char line[80];
-        if (!fgets(line, sizeof(line), stdin)) {
-            break;
+        if (fgets(line, sizeof(line), stdin) == NULL) {
+            printf("Data reading error.\n");
+            return 1;
         }
 
-        /* Nie oczekujemy pustego ciągu znaków of fgets() */
-        size_t len = strlen(line);
-        if (len == 0) {
-            fprintf(stderr, "unexpected empty string returned by fgets\n");
-            break;
+        char text[MAX_LINE_LENGTH] = {};
+
+        if (strcmp("exit\n", line) == 0) {
+            exit(0);
         }
 
-        /* Jeżeli ciąg znaków nie kończy się znakiem nowej linii, oznacza
-           to że część linii pozostała jeszcze nieodczytana */
-        if (line[len - 1] != '\n') {
-        
-            /* W takim przypadku odczytaj reszte linii i zgłoś użytkowikowi
-               że wpisał za dużo znaków */
-            do {
-                if (!fgets(line, sizeof(line), stdin)) {
-                    perror("fgets");
-                    break;
+        if (strcmp("list\n", line) == 0) {
+            for (int i = 0; i < 5; i++) {
+                if (reminders[i][0] != '\0') {
+                printf("[%d] - %s\n", i, reminders[i]);
                 }
-            } while (line[strlen(line)] != '\n');
-
-            fprintf(stderr, "line too long\n");
-            continue;
+            }
         }
 
-        line[len - 1] = 0;
-
-        int h, m;
-        if (sscanf(line, "%d:%d", &h, &m) == 2) {
-            /* Dodaj przypomnienie */
+        if (sscanf(line, "%2d:%2d %[^\n]", &hours, &minutes, text) == 3 && hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+            if (counter < 5) {
+        for (int i = 0; i < 5; i++) {
+            if (reminders[i][0] == '\0' || reminders[i][0] == '\n') {
+                snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.3s", hours, minutes, text);
+                printf("Added reminder '%s' at %.5s.\n", &reminders[i][6], reminders[i]);
+                counter++;
+                break;
+            }
         }
-
-        if (strcmp("list", line) == 0) {
-            /* Wyświetl liste przypomnień */
-        }
-
-        if (strcmp("exit", line) == 0) {
-            /* Zakończ program */
-            break;
-        }
+    } 
+    else 
+    {
+        printf("Can't add reminder '%2d:%2d' at %.5s.\n", hours, minutes, text);
     }
+        } else {
+            printf("Invalid format or time values.\n");
+        }
 
+        if (strchr(line, '\n') == NULL) {
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);
+        }
+
+    }
+//---------------------------------------------
+    
     ret = pthread_join(thread, NULL);
     if (ret) {
         fprintf(stderr, "pthread_join failed with %d\n", ret);
         return 1;
     }
-
+    return 0;
 }

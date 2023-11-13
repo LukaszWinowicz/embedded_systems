@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_LINE_LENGTH 10
+#define MAX_LINE_LENGTH 64
 
 char reminders[5][MAX_LINE_LENGTH] = {};
 int minutes = -1;
@@ -20,12 +20,12 @@ void *alarm_thread(void *arg)
     while (1) {
         sleep(1);
 
-        pthread_mutex_lock(&lock);
+       /* pthread_mutex_lock(&lock);
         if (done) {
             pthread_mutex_unlock(&lock);
             break;
         }
-        pthread_mutex_unlock(&lock);
+        pthread_mutex_unlock(&lock);*/
 
         struct tm tm;
         time_t t = time(NULL);
@@ -38,10 +38,8 @@ void *alarm_thread(void *arg)
             sscanf(reminders[i], "%*3c%2d", &minutes_a);
             if (minutes_a == tm.tm_min && hours_a == tm.tm_hour) {
                 
-               
-
-                printf("<<ALARM>>\n");
-                printf("Hours: %d, Minutes: %d\n", hours_a, minutes_a);
+                //printf("<<ALARM>>\n");
+                //printf("Hours: %d, Minutes: %d\n", hours_a, minutes_a);
                 printf("%s\n", reminders[i]);
 
                 // Wyczyść wpis po aktywacji alarmu
