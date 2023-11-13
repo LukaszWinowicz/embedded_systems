@@ -14,8 +14,10 @@ void addReminder(const char *text, int hours, int minutes, int *counter) {
                 break;
             }
         }
-    } else {
-        printf("Reminder list is at this moment full.\n");
+    } 
+    else 
+    {
+        printf("Can't add reminder '%2d:%2d' at %.5s.\n", hours, minutes, text);
     }
 }
 
