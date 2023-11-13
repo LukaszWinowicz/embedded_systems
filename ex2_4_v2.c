@@ -10,23 +10,15 @@
 char reminders[5][MAX_LINE_LENGTH] = {};
 int minutes = -1;
 int hours = -1;
-int done;
 int minutes_a = -1;
 int hours_a = -1;
+int counter = 0;
 pthread_mutex_t lock;
 
 void *alarm_thread(void *arg)
 {
     while (1) {
         sleep(1);
-
-       /* pthread_mutex_lock(&lock);
-        if (done) {
-            pthread_mutex_unlock(&lock);
-            break;
-        }
-        pthread_mutex_unlock(&lock);*/
-
         struct tm tm;
         time_t t = time(NULL);
         localtime_r(&t, &tm);
@@ -36,11 +28,9 @@ void *alarm_thread(void *arg)
         {
             sscanf(reminders[i], "%2d", &hours_a);
             sscanf(reminders[i], "%*3c%2d", &minutes_a);
-            if (minutes_a == tm.tm_min && hours_a == tm.tm_hour) {
-                
-                //printf("<<ALARM>>\n");
-                //printf("Hours: %d, Minutes: %d\n", hours_a, minutes_a);
-                printf("%s\n", reminders[i]);
+            if (minutes_a == tm.tm_min && hours_a == tm.tm_hour) 
+            {
+                printf("\n| %s\n", reminders[i]);
 
                 // Wyczyść wpis po aktywacji alarmu
                 memset(reminders[i], 0, sizeof(reminders[i]));
@@ -48,7 +38,7 @@ void *alarm_thread(void *arg)
                 // Resetuj zmienne pomocnicze
                 minutes_a = -1;
                 hours_a = -1;
-                
+                counter--;
             }           
         }
         pthread_mutex_unlock(&lock);
@@ -63,7 +53,7 @@ void addReminder(const char *text, int hours, int minutes, int *counter) {
     if (*counter < 5) {
         for (int i = 0; i < 5; i++) {
             if (reminders[i][0] == '\0' || reminders[i][0] == '\n') {
-                snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.3s", hours, minutes, text);
+                snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.57s", hours, minutes, text);
                 printf("Added reminder '%s' at %.5s.\n", &reminders[i][6], reminders[i]);
                 (*counter)++;
                 break;
@@ -72,7 +62,7 @@ void addReminder(const char *text, int hours, int minutes, int *counter) {
     } 
     else 
     {
-        printf("Can't add reminder '%.5s' at %2d:%2d.\n", text, hours, minutes);
+        printf("Can't add reminder '%.57s' at %02d:%02d.\n", text, hours, minutes);
     }
 }
 
@@ -120,7 +110,7 @@ pthread_t thread;
     if (ret)
         goto err_destroy_mutex;
 // -------------------------------------------
-    int counter = 0;
+    
     printf("Enter the data in the format 'HH:MM reminder message': \n");
 
     while (1) {
@@ -139,10 +129,7 @@ pthread_t thread;
 
     }
 //---------------------------------------------
-    pthread_mutex_lock(&lock);
-    done = 1;
-    pthread_mutex_unlock(&lock);
-
+  
     ret = pthread_join(thread, NULL);
     if (ret)
         fprintf(stderr, "pthread_join() error");
@@ -152,3 +139,12 @@ pthread_t thread;
 
     return ret;
 }
+
+/*Do usprawnienia
+1. ilość znaków jako 'text' udawić, żeby była może def globalna?
+2. brak  "> " po alarmie
++3. dodać może prompta przy alarmie? coś żeby się wyróżniało ?
++4. do poprawy -> Can't add reminder 'ab' at 13: 0.
+5. błąd > 13:00b
+Added reminder 'b' at 13:00.
+*/
