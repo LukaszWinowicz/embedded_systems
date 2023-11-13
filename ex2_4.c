@@ -90,5 +90,5 @@ int main(void)
 + 1. format zapisu do tablicy, co jest nie tak
 + 2. format odczytu informacji po godzinie, powinno brać po uwagę spację (roziązane przez: "%d:%d%*1[ ]%[^\n]")
 3. zabezpiecznie wpisywania formatu czasu HH:MM
-4. zabezpiecznie zakresu 00:00 -> 24:00
++ 4. zabezpiecznie zakresu 00:00 -> 24:00
 */
