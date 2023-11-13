@@ -53,13 +53,13 @@ int main(void)
                     if (reminders[i][0] == '\0' || reminders[i][0] == '\n')
                     {
                         // Przygotowanie ciągu do zapisania
-                        char formattedString[10];
+                        char formattedString[10] = {};
                         snprintf(formattedString, sizeof(formattedString), "%02d:%02d %.3s", hours, minutes, text);
 
                         // Teraz możemy bezpiecznie skopiować do reminders
                         strcpy(reminders[i], formattedString);
 
-                        printf("Added to reminder list.\n");
+                        printf("Added reminder '%s' at %.5s.\n", &reminders[i][6], reminders[i]);
                         counter++;
                         break;
                     }
@@ -69,7 +69,8 @@ int main(void)
             {
                 printf("Reminder list is at this moment full.\n");
             }
-        }else 
+        }
+        else 
         {
             printf("Błędny format lub niepoprawne wartości czasu.\n");
         }
