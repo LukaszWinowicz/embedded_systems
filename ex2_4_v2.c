@@ -32,21 +32,30 @@ void *alarm_thread(void *arg)
         localtime_r(&t, &tm);
 
         pthread_mutex_lock(&lock);
-
         for (int i = 0; i < 5; i++)
         {
             sscanf(reminders[i], "%2d", &hours_a);
             sscanf(reminders[i], "%*3c%2d", &minutes_a);
             if (minutes_a == tm.tm_min && hours_a == tm.tm_hour) {
+                
+               
+
                 printf("<<ALARM>>\n");
                 printf("Hours: %d, Minutes: %d\n", hours_a, minutes_a);
+                printf("%s\n", reminders[i]);
+
+                // Wyczyść wpis po aktywacji alarmu
+                memset(reminders[i], 0, sizeof(reminders[i]));
+
+                // Resetuj zmienne pomocnicze
                 minutes_a = -1;
                 hours_a = -1;
-                memset(reminders[i], 0, sizeof(reminders[i]));
+                
             }           
         }
-
         pthread_mutex_unlock(&lock);
+
+       
     }
 
     return NULL;
@@ -129,9 +138,10 @@ pthread_t thread;
         if (strchr(line, '\n') == NULL) {
             clearInputBuffer();
         }
+
     }
 //---------------------------------------------
-     pthread_mutex_lock(&lock);
+    pthread_mutex_lock(&lock);
     done = 1;
     pthread_mutex_unlock(&lock);
 
@@ -139,7 +149,7 @@ pthread_t thread;
     if (ret)
         fprintf(stderr, "pthread_join() error");
 
-err_destroy_mutex:
+    err_destroy_mutex:
     pthread_mutex_destroy(&lock);
 
     return ret;
