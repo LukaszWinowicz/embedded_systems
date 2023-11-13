@@ -9,58 +9,23 @@ H:M Text - dodawanie przypomnień.*/
 #include <string.h>
 
 // zainicjalizowanie pustej tablicy
-char reminders[5][8] = {};
+char reminders[5][10] = {};
+char line[10] = {}; // wprowadzona dana przez użytkowanika
+char text[10] = {};
+int hours, minutes;
+
 int main(void)
 {
-   int counter = 0;
+    int counter = 0;
+    printf("Enter the data in the format 'HH:MM reminder message': \n");
     while (1)     
     {         
 	    printf("> ");
-
-        char line[8];
-        
-        if(!fgets(line, sizeof(line), stdin))
-            break;
-
-        int hours, minutes;
-        char hoursStr[3], minutesStr[3];
-        char text[8];
-
-        if (strcmp("exit\n", line) == 0) {
-		break;
-	    }
-
-        if (strcmp("list\n", line) == 0) {            
-            for (int i = 0; i < 5; i++)
-            {
-                if(reminders[i] != NULL)
-                {
-                    printf("%s", reminders[i]);
-                }      
-            }                  
-	    }
-        
-        if (sscanf(line, "%02s:%02s%*1[ ]%[^\n]", &hours, &minutes, text) == 3 && strlen(hoursStr) == 2 && strlen(minutesStr) == 2) 
-        {            
-            if(counter <= 5)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    if (reminders[i][0] == '\0' || reminders[i][0] == '\n')
-                     {
-                        printf("Added to reminder list.\n");
-                        strcpy(reminders[i], line);
-                        counter++;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                printf("Reminder list is at this moment full.\n");
-            }
+        if (fgets(line, sizeof(line), stdin) == NULL) {
+            printf("Data reading error.\n");
+            return 1;
         }
-       // printf("counter: %d\n", counter);
+
     }
     
     return 0;
