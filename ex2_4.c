@@ -26,6 +26,16 @@ int main(void)
             return 1;
         }
 
+        // [test] Wypisanie zawartości 'line'
+        for (int i = 0; i < sizeof(line); i++) {
+            printf("line[%d] = '%c'\n", i, line[i]);
+        }
+
+        // Wyczyszczenie bufora wejściowego
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+        
+
     }
     
     return 0;
