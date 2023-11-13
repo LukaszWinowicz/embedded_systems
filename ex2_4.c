@@ -44,7 +44,8 @@ int main(void)
                 {
                     printf("%s\n", reminders[i]);
                 }      
-            }                  
+            }         
+            continue;     
 	    }
 
         // Odczytanie danych z wejściowego ciągu znaków
@@ -70,11 +71,11 @@ int main(void)
 
             printf("Odczytano: %2d:%02d, tekst: %s\n", hours, minutes, text);
 
-        } 
+        } /*
         else 
         {
             printf("Błędny format lub niepoprawne wartości czasu.\n");
-        }
+        }*/
 
         // Sprawdzenie, czy ostatni znak w 'line' jest znakiem nowej linii
         if (strchr(line, '\n') == NULL) {
@@ -85,10 +86,3 @@ int main(void)
     }    
     return 0;
 }
-
-/*UWAGI
-+ 1. format zapisu do tablicy, co jest nie tak
-+ 2. format odczytu informacji po godzinie, powinno brać po uwagę spację (roziązane przez: "%d:%d%*1[ ]%[^\n]")
-3. zabezpiecznie wpisywania formatu czasu HH:MM
-+ 4. zabezpiecznie zakresu 00:00 -> 24:00
-*/
