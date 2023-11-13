@@ -25,12 +25,7 @@ int main(void)
             printf("Data reading error.\n");
             return 1;
         }
-        
-        // [test] Wypisanie zawartości 'line'
-        //for (int i = 0; i < sizeof(line); i++) {
-        //    printf("line[%d] = '%c'\n", i, line[i]);
-        //}
-              
+
         if (strcmp("exit\n", line) == 0) 
         {
 		    break;
@@ -50,15 +45,21 @@ int main(void)
 
         // Odczytanie danych z wejściowego ciągu znaków
         if (sscanf(line, "%2d:%2d%*1[ ]%[^\n]", &hours, &minutes, text) == 3  && hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) 
-        {            
-            if(counter <= 5)
+        {        
+            if(counter < 5)
             {
                 for (int i = 0; i < 5; i++)
                 {
                     if (reminders[i][0] == '\0' || reminders[i][0] == '\n')
-                     {
+                    {
+                        // Przygotowanie ciągu do zapisania
+                        char formattedString[10];
+                        snprintf(formattedString, sizeof(formattedString), "%02d:%02d %.3s", hours, minutes, text);
+
+                        // Teraz możemy bezpiecznie skopiować do reminders
+                        strcpy(reminders[i], formattedString);
+
                         printf("Added to reminder list.\n");
-                        strcpy(reminders[i], line);
                         counter++;
                         break;
                     }
@@ -68,15 +69,11 @@ int main(void)
             {
                 printf("Reminder list is at this moment full.\n");
             }
-
-            printf("Odczytano: %2d:%02d, tekst: %s\n", hours, minutes, text);
-
-        } /*
-        else 
+        }else 
         {
             printf("Błędny format lub niepoprawne wartości czasu.\n");
-        }*/
-
+        }
+      
         // Sprawdzenie, czy ostatni znak w 'line' jest znakiem nowej linii
         if (strchr(line, '\n') == NULL) {
             // Wyczyszczenie bufora, jeśli linia jest dłuższa niż bufor
