@@ -23,24 +23,19 @@ void *alarm_thread(void *arg)
         localtime_r(&t, &tm);
 
         pthread_mutex_lock(&lock);
-        for (int i = 0; i < 5; i++)
-        {
-            sscanf(reminders[i], "%2d", &hours);
-            sscanf(reminders[i], "%*3c%2d", &minutes);
-            if (minutes == tm.tm_min && hours == tm.tm_hour) 
+            for (int i = 0; i < 5; i++)
             {
-                printf("\n| %s\n", reminders[i]);
-
-                // Wyczyść wpis po aktywacji alarmu
-                memset(reminders[i], 0, sizeof(reminders[i]));
-
-                // Resetuj zmienne pomocnicze
-                minutes = -1;
-                hours = -1;
-
-                counter--;
-            }           
-        }
+                sscanf(reminders[i], "%2d", &hours);
+                sscanf(reminders[i], "%*3c%2d", &minutes);
+                if (minutes == tm.tm_min && hours == tm.tm_hour) 
+                {
+                    printf("\n| %s\n", reminders[i]);
+                    memset(reminders[i], 0, sizeof(reminders[i]));
+                    minutes = -1;
+                    hours = -1;
+                    counter--;
+                }           
+            }
         pthread_mutex_unlock(&lock);       
     }
 
@@ -49,7 +44,8 @@ void *alarm_thread(void *arg)
 
 void addReminder(const char *text, int hours, int minutes, int *counter) 
 {
-    if (*counter < 5) {
+    if (*counter < 5) 
+    {
         for (int i = 0; i < 5; i++) {
             if (reminders[i][0] == '\0' || reminders[i][0] == '\n') 
             {
@@ -85,11 +81,13 @@ void parseInput(char *line, int *counter)
 {    
     char text[MAX_LINE_LENGTH] = {};
 
-    if (strcmp("exit\n", line) == 0) {
+    if (strcmp("exit\n", line) == 0) 
+    {
         exit(0);
     }
 
-    if (strcmp("list\n", line) == 0) {
+    if (strcmp("list\n", line) == 0) 
+    {
         printReminders();
         return;
     }
