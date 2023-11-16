@@ -38,6 +38,7 @@ void *alarm_thread(void *arg)
                 // Resetuj zmienne pomocnicze
                 minutes_a = -1;
                 hours_a = -1;
+
                 counter--;
             }           
         }
@@ -145,6 +146,5 @@ pthread_t thread;
 2. brak  "> " po alarmie
 +3. dodać może prompta przy alarmie? coś żeby się wyróżniało ?
 +4. do poprawy -> Can't add reminder 'ab' at 13: 0.
-5. błąd > 13:00b
-Added reminder 'b' at 13:00.
+5. błąd > 13:00b - Added reminder 'b' at 13:00.
 */
