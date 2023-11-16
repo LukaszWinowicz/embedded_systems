@@ -21,27 +21,29 @@ void *alarm_thread(void *arg)
 {
     while (1) 
     {
-        sleep(1);
         struct tm tm;
         time_t t = time(NULL);
         localtime_r(&t, &tm);
 
         for (int i = 0; i < 5; i++)
         {
-            sscanf(reminders[i], "%2d", &hours_alarm);
-            sscanf(reminders[i], "%*3c%2d", &minutes_alarm);
+            sscanf(reminders[i], "%2d", &hours);
+            sscanf(reminders[i], "%*3c%2d", &minutes);
 
             pthread_mutex_lock(&lock);
-            if (minutes_alarm == tm.tm_min && hours_alarm == tm.tm_hour) 
+            if (minutes == tm.tm_min && hours == tm.tm_hour) 
             {
-                printf("\n%s\n", reminders[i]);
+                printf("\n%s\n>", reminders[i]);
+                fflush(stdout);
                 memset(reminders[i], 0, sizeof(reminders[i]));
-                minutes_alarm = -1;
-                hours_alarm = -1;                    
+                
+                minutes = -1;
+                hours = -1;                    
                 counter--;
-            }      
+            }
             pthread_mutex_unlock(&lock);     
         }
+        sleep(10);
     }
 
     return NULL;
@@ -134,7 +136,6 @@ int main(void)
     ret = pthread_create(&thread, NULL, alarm_thread, NULL);
     if (ret)
         goto err_destroy_mutex;
-// -------------------------------------------
     
     printf("Enter the data in the format 'HH:MM reminder message': \n");
 
@@ -155,7 +156,6 @@ int main(void)
         }
 
     }    
-//---------------------------------------------
   
     ret = pthread_join(thread, NULL);
     if (ret)
@@ -166,10 +166,3 @@ int main(void)
 
     return ret;
 }
-
-
-/*
-+ 1. Zablokować możliwość dodawania pustego wpisu
-2. Znak zachęty po pokazaniu się danych
-
-*/
