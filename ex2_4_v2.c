@@ -26,21 +26,22 @@ void *alarm_thread(void *arg)
         time_t t = time(NULL);
         localtime_r(&t, &tm);
 
-        pthread_mutex_lock(&lock);
-            for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
+        {
+            sscanf(reminders[i], "%2d", &hours_alarm);
+            sscanf(reminders[i], "%*3c%2d", &minutes_alarm);
+
+            pthread_mutex_lock(&lock);
+            if (minutes_alarm == tm.tm_min && hours_alarm == tm.tm_hour) 
             {
-                sscanf(reminders[i], "%2d", &hours_alarm);
-                sscanf(reminders[i], "%*3c%2d", &minutes_alarm);
-                if (minutes_alarm == tm.tm_min && hours_alarm == tm.tm_hour) 
-                {
-                    printf("\n| %s\n", reminders[i]);
-                    memset(reminders[i], 0, sizeof(reminders[i]));
-                    minutes_alarm = -1;
-                    hours_alarm = -1;                    
-                    counter--;
-                }           
-            }
-        pthread_mutex_unlock(&lock);       
+                printf("\n%s\n", reminders[i]);
+                memset(reminders[i], 0, sizeof(reminders[i]));
+                minutes_alarm = -1;
+                hours_alarm = -1;                    
+                counter--;
+            }      
+            pthread_mutex_unlock(&lock);     
+        }
     }
 
     return NULL;
@@ -69,8 +70,10 @@ void addReminder(const char *text, int hours, int minutes, int *counter)
 
 void printReminders() 
 {
-    for (int i = 0; i < 5; i++) {
-        if (reminders[i][0] != '\0') {
+    for (int i = 0; i < 5; i++) 
+    {
+        if (reminders[i][0] != '\0') 
+        {
             printf("[%d] - %s\n", i, reminders[i]);
         }
     }
@@ -100,20 +103,20 @@ void parseInput(char *line, int *counter)
     if (sscanf(line, "%2d:%2d%*1[ ]%[^\n]", &hours, &minutes, text) == 3 && hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) 
     {
         int onlySpaces = 1;
-        for (int i = 0; text[i] != '\0'; i++) {
+        for (int i = 0; text[i] != '\0'; i++) 
+        {
             if (!isspace((unsigned char)text[i])) {
                 onlySpaces = 0;
                 break;
             }
         }
 
-        if (onlySpaces) {
+        if (onlySpaces) 
+        {
             printf("The text consists of whitespace only.\n");
         } else {
             addReminder(text, hours, minutes, counter);
         }
-
-        
     } 
     else 
     {
@@ -166,7 +169,7 @@ int main(void)
 
 
 /*
-1. Zablokować możliwość dodawania pustego wpisu
++ 1. Zablokować możliwość dodawania pustego wpisu
 2. Znak zachęty po pokazaniu się danych
 
 */
