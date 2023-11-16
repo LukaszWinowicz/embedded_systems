@@ -12,7 +12,7 @@ int minutes = -1;
 int hours = -1;
 int counter = 0;
 pthread_mutex_t lock;
-int width = MAX_LINE_LENGTH-7;
+int text_lenght = MAX_LINE_LENGTH-7;
 
 void *alarm_thread(void *arg)
 {
@@ -49,7 +49,7 @@ void addReminder(const char *text, int hours, int minutes, int *counter)
         for (int i = 0; i < 5; i++) {
             if (reminders[i][0] == '\0' || reminders[i][0] == '\n') 
             {
-                snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.*s", hours, minutes, width, text);
+                snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.*s", hours, minutes, text_lenght, text);
                 printf("Added reminder '%s' at %.5s.\n", &reminders[i][6], reminders[i]);
                 (*counter)++;
                 break;
@@ -58,7 +58,7 @@ void addReminder(const char *text, int hours, int minutes, int *counter)
     } 
     else 
     {
-        printf("Can't add reminder '%.57s' at %02d:%02d.\n", text, hours, minutes);
+        printf("Can't add reminder '%.*s' at %02d:%02d.\n", text_lenght, text, hours, minutes);
     }
 }
 
@@ -92,9 +92,12 @@ void parseInput(char *line, int *counter)
         return;
     }
 
-    if (sscanf(line, "%2d:%2d%*1[ ]%[^\n]", &hours, &minutes, text) == 3 && hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) {
+    if (sscanf(line, "%2d:%2d%*1[ ]%[^\n]", &hours, &minutes, text) == 3 && hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59) 
+    {
         addReminder(text, hours, minutes, counter);
-    } else {
+    } 
+    else 
+    {
         printf("Invalid format or time values.\n");
     }
 }
@@ -139,7 +142,3 @@ int main(void)
 
     return ret;
 }
-
-/*Do usprawnienia
-!. brak  "> " po alarmie
-*/
