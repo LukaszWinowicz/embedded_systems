@@ -10,10 +10,9 @@
 char reminders[5][MAX_LINE_LENGTH] = {};
 int minutes = -1;
 int hours = -1;
-int minutes_a = -1;
-int hours_a = -1;
 int counter = 0;
 pthread_mutex_t lock;
+int width = MAX_LINE_LENGTH-7;
 
 void *alarm_thread(void *arg)
 {
@@ -26,9 +25,9 @@ void *alarm_thread(void *arg)
         pthread_mutex_lock(&lock);
         for (int i = 0; i < 5; i++)
         {
-            sscanf(reminders[i], "%2d", &hours_a);
-            sscanf(reminders[i], "%*3c%2d", &minutes_a);
-            if (minutes_a == tm.tm_min && hours_a == tm.tm_hour) 
+            sscanf(reminders[i], "%2d", &hours);
+            sscanf(reminders[i], "%*3c%2d", &minutes);
+            if (minutes == tm.tm_min && hours == tm.tm_hour) 
             {
                 printf("\n| %s\n", reminders[i]);
 
@@ -36,25 +35,25 @@ void *alarm_thread(void *arg)
                 memset(reminders[i], 0, sizeof(reminders[i]));
 
                 // Resetuj zmienne pomocnicze
-                minutes_a = -1;
-                hours_a = -1;
+                minutes = -1;
+                hours = -1;
 
                 counter--;
             }           
         }
-        pthread_mutex_unlock(&lock);
-
-       
+        pthread_mutex_unlock(&lock);       
     }
 
     return NULL;
 }
 
-void addReminder(const char *text, int hours, int minutes, int *counter) {
+void addReminder(const char *text, int hours, int minutes, int *counter) 
+{
     if (*counter < 5) {
         for (int i = 0; i < 5; i++) {
-            if (reminders[i][0] == '\0' || reminders[i][0] == '\n') {
-                snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.57s", hours, minutes, text);
+            if (reminders[i][0] == '\0' || reminders[i][0] == '\n') 
+            {
+                snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.*s", hours, minutes, width, text);
                 printf("Added reminder '%s' at %.5s.\n", &reminders[i][6], reminders[i]);
                 (*counter)++;
                 break;
@@ -67,7 +66,8 @@ void addReminder(const char *text, int hours, int minutes, int *counter) {
     }
 }
 
-void printReminders() {
+void printReminders() 
+{
     for (int i = 0; i < 5; i++) {
         if (reminders[i][0] != '\0') {
             printf("[%d] - %s\n", i, reminders[i]);
@@ -75,13 +75,14 @@ void printReminders() {
     }
 }
 
-void clearInputBuffer() {
+void clearInputBuffer() 
+{
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-void parseInput(char *line, int *counter) {
-    
+void parseInput(char *line, int *counter) 
+{    
     char text[MAX_LINE_LENGTH] = {};
 
     if (strcmp("exit\n", line) == 0) {
@@ -100,9 +101,9 @@ void parseInput(char *line, int *counter) {
     }
 }
 
-int main(void) {
-pthread_t thread;
-
+int main(void) 
+{
+    pthread_t thread;
     int ret = pthread_mutex_init(&lock, NULL);
     if (ret)
         return ret;
@@ -128,7 +129,7 @@ pthread_t thread;
             clearInputBuffer();
         }
 
-    }
+    }    
 //---------------------------------------------
   
     ret = pthread_join(thread, NULL);
@@ -142,9 +143,5 @@ pthread_t thread;
 }
 
 /*Do usprawnienia
-1. ilość znaków jako 'text' udawić, żeby była może def globalna?
-2. brak  "> " po alarmie
-+3. dodać może prompta przy alarmie? coś żeby się wyróżniało ?
-+4. do poprawy -> Can't add reminder 'ab' at 13: 0.
-5. błąd > 13:00b - Added reminder 'b' at 13:00.
+!. brak  "> " po alarmie
 */
