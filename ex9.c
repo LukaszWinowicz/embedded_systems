@@ -2,6 +2,63 @@
 #include <string.h>
 #include <ctype.h>
 
+void draw_hangman(int mistakes) {
+    switch (mistakes) {
+        case 0:
+            printf(stderr, " .----.\n");
+            printf(stderr, "       |\n");
+            printf(stderr, "       |\n");
+            printf(stderr, "       |\n");
+            printf(stderr, "      / \\\n");
+            break;
+        case 1:
+            printf(stderr, " .----.\n");
+            printf(stderr, " O     |\n");
+            printf(stderr, "       |\n");
+            printf(stderr, "       |\n");
+            printf(stderr, "      / \\\n");
+            break;
+        case 2:
+            printf(stderr, " .----.\n");
+            printf(stderr, " O     |\n");
+            printf(stderr, "  \    |\n");
+            printf(stderr, "       |\n");
+            printf(stderr, "      / \\\n");
+            break;
+        case 3:
+            printf(stderr, " .----.\n");
+            printf(stderr, " O     |\n");
+            printf(stderr, " |\    |\n");
+            printf(stderr, "       |\n");
+            printf(stderr, "      / \\\n");
+            break;
+        case 4:
+            printf(stderr, " .----.\n");
+            printf(stderr, " O     |\n");
+            printf(stderr, "/|\    |\n");
+            printf(stderr, "       |\n");
+            printf(stderr, "      / \\\n");
+            break;
+        case 5:
+            printf(stderr, " .----.\n");
+            printf(stderr, " O     |\n");
+            printf(stderr, "/|\    |\n");
+            printf(stderr, "/      |\n");
+            printf(stderr, "      / \\\n");
+            break;
+        case 6:
+            printf(stderr, " .----.\n");
+            printf(stderr, " O     |\n");
+            printf(stderr, "/|\    |\n");
+            printf(stderr, "/ \     |\n");
+            printf(stderr, "      / \\\n");
+            break;       
+        default:
+            printf("Niepoprawna liczba błędów.\n");
+            break;
+    }
+}
+
 int main() {
     char secretWord[] = "Warszawa";
     char guessedLetters[strlen(secretWord)];
