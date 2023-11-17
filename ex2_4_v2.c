@@ -11,8 +11,6 @@
 char reminders[5][MAX_LINE_LENGTH] = {};
 int minutes = -1;
 int hours = -1;
-int minutes_alarm = -1;
-int hours_alarm = -1;
 int counter = 0;
 pthread_mutex_t lock;
 int text_lenght = MAX_LINE_LENGTH-7;
@@ -24,16 +22,15 @@ void *alarm_thread(void *arg)
         struct tm tm;
         time_t t = time(NULL);
         localtime_r(&t, &tm);
-
+        pthread_mutex_lock(&lock);
         for (int i = 0; i < 5; i++)
         {
             sscanf(reminders[i], "%2d", &hours);
             sscanf(reminders[i], "%*3c%2d", &minutes);
-
-            pthread_mutex_lock(&lock);
+            
             if (minutes == tm.tm_min && hours == tm.tm_hour) 
             {
-                printf("\n%s\n>", reminders[i]);
+                printf("\n%s\n> ", reminders[i]);
                 fflush(stdout);
                 memset(reminders[i], 0, sizeof(reminders[i]));
                 
@@ -41,9 +38,10 @@ void *alarm_thread(void *arg)
                 hours = -1;                    
                 counter--;
             }
-            pthread_mutex_unlock(&lock);     
+            
         }
-        sleep(10);
+        pthread_mutex_unlock(&lock);     
+        sleep(60);
     }
 
     return NULL;
