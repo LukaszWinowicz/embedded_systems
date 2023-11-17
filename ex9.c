@@ -54,8 +54,7 @@ void draw_hangman(int mistakes)
             printf("/ \\    |\n");
             printf("      / \\\n");
             break;       
-        default:
-            printf("Niepoprawna liczba błędów.\n");
+        default:            
             break;
     }
 }
@@ -63,21 +62,21 @@ void draw_hangman(int mistakes)
 int main() 
 {
     char secretWord[] = "Warszawa";
-    char guessedLetters[strlen(secretWord)];
+    char guessedLetters[strlen(secretWord) + 1];
     memset(guessedLetters, '_', strlen(secretWord));
+    guessedLetters[strlen(secretWord)] = '\0';
 
     char guess[100];
-    int mistakes = 0; // Licznik błędów
+    int mistakes = 0;
 
     while (mistakes < 6) 
     {
-        draw_hangman(mistakes); // Wyświetl stan wisielca
+        draw_hangman(mistakes);
         printf("----------------------------------------------------\n");
         printf("Guess the word: %s\n", guessedLetters);
         printf("Enter a letter or try to guess the word: ");
         fgets(guess, 100, stdin);
 
-        // Usunięcie znaku nowej linii
         guess[strcspn(guess, "\n")] = 0;
 
         if (strlen(guess) == 1) 
@@ -95,7 +94,7 @@ int main()
             if (!found) 
             {
                 printf("There is no such letter!\n");
-                mistakes++; // Zwiększ licznik błędów
+                mistakes++;
             }
         } 
         else if (strlen(guess) == strlen(secretWord)) 
@@ -108,13 +107,13 @@ int main()
             else 
             {
                 printf("This is not the correct word!\n");
-                mistakes++; // Zwiększ licznik błędów
+                mistakes++;
             }
         } 
         else 
         {
-            printf("Niepoprawne wejście!\n");
-            mistakes++; // Zwiększ licznik błędów
+            printf("Invalid input!\n");
+            mistakes++;
         }
 
         if (strcmp(guessedLetters, secretWord) == 0) 
