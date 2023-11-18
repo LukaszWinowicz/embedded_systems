@@ -4,6 +4,7 @@
 #include <string.h>
 #include <termios.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #define MAP_W 5
 #define MAP_H 5
@@ -12,6 +13,7 @@ struct character {
     char c;
     int x;
     int y;
+    bool dead;
 };
 
 /* Jeżeli dir to 'w', 's', 'a' lub 'd' to rusz graczem o jedną jednostkę w odpowiednim kierunku.
@@ -109,6 +111,14 @@ void enableRawMode() {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 
+bool all_dead(const struct character *c, size_t len)
+{
+    for (size_t i = 0; i < len; i++)
+    {
+        /* code */
+    }
+}
+
 int main(void){
 
     enableRawMode();
@@ -127,26 +137,35 @@ int main(void){
         frame_clear(&frame);
         for (int i = 0; i < sizeof(enemies)/sizeof(enemies[0]); i++)
         {
-             frame_add(&frame, &enemies[i]);
+            if (enemies[i].dead == false)
+            {
+                frame_add(&frame, &enemies[i]);
+            }            
         };
 
         frame_add(&frame, &player);
         frame_draw(&frame);
 
+        // main character move
         char c;
         if(read(STDIN_FILENO, &c, 1) == 1 && c != 'q')
         {
             character_move(&player, c);
         };
         
+        // enemie random move
         for (int i = 0; i < sizeof(enemies)/sizeof(enemies[0]); i++)
         {
             character_random_move(&enemies[i]);
         }
 
+        // if kill enemie
+        for (int  i = 0; i < sizeof(enemies)/sizeof(enemies[0]); i++)
+        {
+            if (player.x == enemies[i].x && player.y == enemies[i].y)
+            {
+                enemies[i].dead = true;
+            }            
+        }
     }
 }
-
-/*TODO:
-1. czyszczenie obrazu po każdym kroku
-2. wciskam wsda i bez entera już, kążdy inny przycisk nic nie robi*/
