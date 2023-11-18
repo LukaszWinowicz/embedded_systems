@@ -103,20 +103,28 @@ void frame_draw(struct frame *frame){
     };
 };
 
-void enableRawMode() {
-    struct termios raw;
-    tcgetattr(STDIN_FILENO, &raw);
+struct termios orig_termios;
 
+void disableRawMode() {
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &orig_termios);
+}
+
+void enableRawMode() {
+    tcgetattr(STDIN_FILENO, &orig_termios);
+    atexit(disableRawMode);
+
+    struct termios raw = orig_termios;
     raw.c_lflag &= ~(ECHO | ICANON);
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 
-bool all_dead(const struct character *c, size_t len)
-{
-    for (size_t i = 0; i < len; i++)
-    {
-        /* code */
+bool all_dead(const struct character *c, size_t len) {
+    for (size_t i = 0; i < len; i++) {
+        if (!c[i].dead) {
+            return false;
+        }
     }
+    return true;
 }
 
 int main(void){
@@ -133,6 +141,12 @@ int main(void){
     while (1)
     {
         system("clear");
+
+        if (all_dead(enemies, sizeof(enemies)/sizeof(enemies[0]))) {
+            printf("All enemies are dead. You win!.\n");
+            break;
+        }
+
         struct frame frame;
         frame_clear(&frame);
         for (int i = 0; i < sizeof(enemies)/sizeof(enemies[0]); i++)
@@ -168,4 +182,6 @@ int main(void){
             }            
         }
     }
+
+    return 0;
 }
