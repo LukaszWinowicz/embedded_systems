@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <string.h>
+#include <termios.h>
+#include <unistd.h>
 
 #define MAP_W 5
 #define MAP_H 5
@@ -99,7 +101,18 @@ void frame_draw(struct frame *frame){
     };
 };
 
+void enableRawMode() {
+    struct termios raw;
+    tcgetattr(STDIN_FILENO, &raw);
+
+    raw.c_lflag &= ~(ECHO | ICANON);
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+}
+
 int main(void){
+
+    enableRawMode();
+
     struct character player = {'&', 0, 0};
     struct character enemies[] = {
         {'A', 0, MAP_H-1},
@@ -109,6 +122,7 @@ int main(void){
 
     while (1)
     {
+        system("clear");
         struct frame frame;
         frame_clear(&frame);
         for (int i = 0; i < sizeof(enemies)/sizeof(enemies[0]); i++)
@@ -120,7 +134,7 @@ int main(void){
         frame_draw(&frame);
 
         char c;
-        if (scanf(" %c", &c) == 1)
+        if(read(STDIN_FILENO, &c, 1) == 1 && c != 'q')
         {
             character_move(&player, c);
         };
@@ -132,3 +146,7 @@ int main(void){
 
     }
 }
+
+/*TODO:
+1. czyszczenie obrazu po każdym kroku
+2. wciskam wsda i bez entera już, kążdy inny przycisk nic nie robi*/
