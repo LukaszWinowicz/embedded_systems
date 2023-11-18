@@ -1,5 +1,8 @@
 #include <stdio.h>
 
+#define MAP_W 5
+#define MAP_H 5
+
 struct character {
     char c;
     int x;
@@ -34,3 +37,51 @@ void character_move(struct character *ch, char dir){
 
     
 };
+
+struct frame {
+    char cells[MAP_W][MAP_H];
+};
+
+/* wyczyść bufor znakami '.' */
+void frame_clear(struct frame *frame){
+    for (int) i = 0; i < MAP_W; i++)
+    {
+        for (int j = 0; j < MAP_H; j++)
+        {
+            frame->cells[i][j] = '.';
+        }        
+    }    
+};
+
+/* umieść gracza buforze */
+void frame_add(struct frame *frame, struct character *ch){
+    frame->cells[ch->y][ch->x] = ch->c;
+};
+ 
+/* wypisz bufor */
+void frame_draw(struct frame *frame){
+    for (int) i = 0; i < MAP_W; i++)
+    {
+        for (int j = 0; j < MAP_H; j++)
+        {
+            printf("%c", frame->cells[i][j]);
+        }
+        printf("\n");
+    }    
+};
+
+int main(void){
+struct character player = {'&', 0, 0};
+struct character enemies[] = {
+    {'A', 0, MAP_H-1},
+    {'B', MAP_W-1, 0},
+    {"C", 2, 2}
+};
+
+while (1)
+{
+    
+}
+
+
+}
