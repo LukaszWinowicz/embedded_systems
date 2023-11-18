@@ -80,6 +80,21 @@ struct character enemies[] = {
 
 while (1)
 {
+    struct frame frame;
+    frame_clear(&frame);
+    for (int i = 0; i < sizeof(enemies)/sizeof(enemies[0]); i++)
+    {
+        /* code */
+    }
+    frame_add(&frame, &player);
+    frame_draw(&frame);
+
+    char c;
+    if (scanf(" %c", &c) == 1)
+    {
+        character_move(&player, c);
+    }
+    
     
 }
 
