@@ -34,8 +34,14 @@ int main(int argc, char **argv){
             break;
         }
 
-        fwrite(buffer, 1, count, dst);
-
+        size_t written = fwrite(buffer, 1, count, dst);
+        if (written != count){
+            fprintf(stderr, "%s: error: can't write to '%s\n", argv[0], argv[2]);
+            fclose(dst);
+			fclose(src);
+			return 1;
+        }
+        
     }
 
     fclose(dst);
