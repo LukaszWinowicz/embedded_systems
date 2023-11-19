@@ -24,6 +24,20 @@ int main(int argc, char **argv){
         return 1;
     }
 
+    // Odczyt danych z pliku źródłowego (src)
+    while (1){
+
+        char buffer[128];
+
+        size_t count = fread(buffer, 1, sizeof(buffer), src);
+        if (count == 0){
+            break;
+        }
+
+        fwrite(buffer, 1, count, dst);
+
+    }
+
     fclose(dst);
     fclose(src);
     return 0;
