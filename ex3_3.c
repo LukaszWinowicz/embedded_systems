@@ -13,6 +13,44 @@ int hour = -1;
 int done;
 pthread_mutex_t lock;
 
+void save(void){
+    // Otworz plik o nazwie 'state'
+    FILE *dst = fopen("state", "w");
+    if (!dst){
+        fprintf(stderr, "unable to open file for writing\n");
+        return;
+    }
+
+    // Wpisz do niego munutę i godzinę   
+    if (fprintf(dst, "%d %d", hour, minute) < 0){
+        fprintf(stderr, "unable to save file\n");
+        fclose(dst);
+        return;
+    }
+    
+    fclose(dst);
+}
+
+void load(void){
+    FILE *src = fopen("state", "r");
+    if (!src){
+        hour = -1;
+        minute = -1;
+        return;
+    }
+
+    if (fscanf(src, "%d %d", &hour, &minute) != 2){
+
+        fprintf(stderr, "unable to parse tate file\n");
+        hour = -1;
+        minute = -1;
+        fclose(src);
+        return;
+    }
+    
+    fclose(src);
+}
+
 void *alarm_thread(void *arg)
 {
     while (1) {
@@ -34,6 +72,7 @@ void *alarm_thread(void *arg)
             printf("<<ALARM>>\n");
             minute = -1;
             hour = -1;
+            save();
         }
         pthread_mutex_unlock(&lock);
     }
@@ -43,6 +82,7 @@ void *alarm_thread(void *arg)
 
 int main(void)
 {
+    load();
     pthread_t thread;
 
     int ret = pthread_mutex_init(&lock, NULL);
@@ -67,6 +107,7 @@ int main(void)
             pthread_mutex_lock(&lock);
             minute = m;
             hour = h;
+            save();
             pthread_mutex_unlock(&lock);
         }
 
@@ -75,6 +116,7 @@ int main(void)
             pthread_mutex_lock(&lock);
             minute = -1;
             hour = -1;
+            save();
             pthread_mutex_unlock(&lock);
         }
 
