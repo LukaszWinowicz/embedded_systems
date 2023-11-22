@@ -1,3 +1,41 @@
-dane testowe
-bla bla
-a
+void save(void){
+    FILE *dst = fopen("state", "w");
+    if (!dst) {
+        fprintf(stderr, "unable to open file for writing\n");
+        return;
+    }
+
+    // Wpisz do niego minuty i godziny
+    for (int i = 0; i < 5; i++)
+    {
+        if (fprintf(dst, "%s\n", reminders[i]) < 0) {
+        fprintf(stderr, "unable to save file\n");
+        fclose(dst);
+        return;
+        }
+    }
+    fclose(dst);
+
+}
+
+void load(void)
+{
+    FILE *src = fopen("state", "r");
+    if (!src) {
+        hours = -1;
+        minutes = -1;
+        return;
+    }
+
+    char buffer[64];
+    int i = 0;
+    while (i < 5 && fscanf(src, "%2d:%2d%*1[ ]%[^\n]", &hours, &minutes, buffer) == 3) {
+        snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.*s", hours, minutes, text_lenght, buffer);
+        i++;
+        // Ominąć resztę linii, jeśli jest dłuższa niż przeczytany fragment
+        fscanf(src, "%*[^\n]");
+        fscanf(src, "%*1[\n]");
+    }
+     fclose(src);
+
+}

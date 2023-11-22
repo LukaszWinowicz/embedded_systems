@@ -9,6 +9,7 @@
 #define MAX_LINE_LENGTH 64
 
 char reminders[5][MAX_LINE_LENGTH] = {};
+char text[MAX_LINE_LENGTH] = {};
 int minutes = -1;
 int hours = -1;
 int counter = 0;
@@ -35,6 +36,27 @@ void save(void){
 
 }
 
+void load(void)
+{
+    FILE *src = fopen("state", "r");
+    if (!src) {
+        hours = -1;
+        minutes = -1;
+        return;
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+      if (fscanf(src, "%2d:%2d%*1[ ]%[^\n]", &hours, &minutes, text) == 3)
+      {         
+        snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.*s", hours, minutes, text_lenght, text);
+        counter++;
+      }
+    }
+    fclose(src);
+
+}
+
 void *alarm_thread(void *arg)
 {
     while (1) 
@@ -52,11 +74,11 @@ void *alarm_thread(void *arg)
             {
                 printf("\n%s\n> ", reminders[i]);
                 fflush(stdout);
-                memset(reminders[i], 0, sizeof(reminders[i]));
-                save();
+                memset(reminders[i], 0, sizeof(reminders[i]));                
                 minutes = -1;
                 hours = -1;                    
                 counter--;
+                save();
             }
             
         }
@@ -112,11 +134,11 @@ void clearInputBuffer()
 
 void parseInput(char *line, int *counter) 
 {    
-    char text[MAX_LINE_LENGTH] = {};
+    //char text[MAX_LINE_LENGTH] = {};
 
     if (strcmp("exit\n", line) == 0) 
     {
-        save();
+        save(); // tutaj zrobić formatowanie przy wychodzeniu
         exit(0);
     }
 
@@ -152,6 +174,7 @@ void parseInput(char *line, int *counter)
 
 int main(void) 
 {
+    load();
     pthread_t thread;
     int ret = pthread_mutex_init(&lock, NULL);
     if (ret)
