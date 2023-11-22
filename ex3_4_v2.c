@@ -53,7 +53,7 @@ void *alarm_thread(void *arg)
                 printf("\n%s\n> ", reminders[i]);
                 fflush(stdout);
                 memset(reminders[i], 0, sizeof(reminders[i]));
-                
+                save();
                 minutes = -1;
                 hours = -1;                    
                 counter--;
