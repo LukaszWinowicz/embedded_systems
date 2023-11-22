@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <signal.h>
 
 #define MAX_LINE_LENGTH 64
 
@@ -132,15 +133,22 @@ void clearInputBuffer()
     while ((c = getchar()) != '\n' && c != EOF);
 }
 
-void parseInput(char *line, int *counter) 
-{    
-    //char text[MAX_LINE_LENGTH] = {};
+void signalHandler(int sig) {
+    if (sig == SIGINT) {
+        save();
+        exit(0);
+    }
+}
 
+void parseInput(char *line, int *counter) 
+{
     if (strcmp("exit\n", line) == 0) 
     {
         save(); // tutaj zrobić formatowanie przy wychodzeniu
         exit(0);
     }
+
+    signal(SIGINT, signalHandler);
 
     if (strcmp("list\n", line) == 0) 
     {
