@@ -59,6 +59,7 @@
   "C_Cpp.errorSquiggles": "disabled",
   "files.associations": {
     "string.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "ex3_4_v2": "c"
   }
 }

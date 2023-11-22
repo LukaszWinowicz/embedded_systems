@@ -15,6 +15,26 @@ int counter = 0;
 pthread_mutex_t lock;
 int text_lenght = MAX_LINE_LENGTH-7;
 
+void save(void){
+    FILE *dst = fopen("state", "w");
+    if (!dst) {
+        fprintf(stderr, "unable to open file for writing\n");
+        return;
+    }
+
+    // Wpisz do niego minuty i godziny
+    for (int i = 0; i < 5; i++)
+    {
+        if (fprintf(dst, "%s\n", reminders[i]) < 0) {
+        fprintf(stderr, "unable to save file\n");
+        fclose(dst);
+        return;
+        }
+    }
+    fclose(dst);
+
+}
+
 void *alarm_thread(void *arg)
 {
     while (1) 
@@ -59,6 +79,7 @@ void addReminder(const char *text, int hours, int minutes, int *counter)
                 snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.*s", hours, minutes, text_lenght, text);
                 printf("Added reminder '%s' at %.5s.\n", &reminders[i][6], reminders[i]);
                 (*counter)++;
+                save();
                 break;
             }
         }
@@ -95,6 +116,7 @@ void parseInput(char *line, int *counter)
 
     if (strcmp("exit\n", line) == 0) 
     {
+        save();
         exit(0);
     }
 
