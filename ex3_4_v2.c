@@ -23,8 +23,6 @@ void save(void){
         fprintf(stderr, "unable to open file for writing\n");
         return;
     }
-
-    // Wpisz do niego minuty i godziny
     for (int i = 0; i < 5; i++)
     {
         if (fprintf(dst, "%s\n", reminders[i]) < 0) {
@@ -34,7 +32,6 @@ void save(void){
         }
     }
     fclose(dst);
-
 }
 
 void load(void)
@@ -48,14 +45,13 @@ void load(void)
 
     for (int i = 0; i < 5; i++)
     {
-      if (fscanf(src, "%2d:%2d%*1[ ]%[^\n]", &hours, &minutes, text) == 3)
+      if (fscanf(src, "%2d:%2d%*1[ ]%[^\n]", &hours, &minutes, text) == 3 && hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59)
       {         
         snprintf(reminders[i], sizeof(reminders[i]), "%02d:%02d %.*s", hours, minutes, text_lenght, text);
         counter++;
-      }
+      } 
     }
     fclose(src);
-
 }
 
 void *alarm_thread(void *arg)
@@ -84,7 +80,7 @@ void *alarm_thread(void *arg)
             
         }
         pthread_mutex_unlock(&lock);     
-        sleep(60);
+        sleep(1);
     }
 
     return NULL;
@@ -144,7 +140,7 @@ void parseInput(char *line, int *counter)
 {
     if (strcmp("exit\n", line) == 0) 
     {
-        save(); // tutaj zrobić formatowanie przy wychodzeniu
+        save();
         exit(0);
     }
 
