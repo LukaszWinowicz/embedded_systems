@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include "hangman.h"
+#include "rps.h"
+#include "movement.h"
 
 int main(void){
     int c;
@@ -18,7 +21,7 @@ int main(void){
         case 3:
             movement();
             break;
-            
+
         default:
             break;
         }
