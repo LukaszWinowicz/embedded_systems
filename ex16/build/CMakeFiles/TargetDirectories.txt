@@ -1,0 +1,3 @@
+/mnt/d/Język C/wpsl/ex16/build/CMakeFiles/twojprogram.dir
+/mnt/d/Język C/wpsl/ex16/build/CMakeFiles/edit_cache.dir
+/mnt/d/Język C/wpsl/ex16/build/CMakeFiles/rebuild_cache.dir
