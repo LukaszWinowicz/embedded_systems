@@ -60,6 +60,9 @@
   "files.associations": {
     "string.h": "c",
     "stdlib.h": "c",
-    "ex3_4_v2": "c"
+    "ex3_4_v2": "c",
+    "hangman.h": "c",
+    "rps.h": "c",
+    "movement.h": "c"
   }
 }
