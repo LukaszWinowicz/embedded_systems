@@ -64,6 +64,7 @@
     "hangman.h": "c",
     "rps.h": "c",
     "movement.h": "c",
-    "types.h": "c"
+    "types.h": "c",
+    "stdio.h": "c"
   }
 }
