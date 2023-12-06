@@ -66,5 +66,6 @@
     "movement.h": "c",
     "types.h": "c",
     "stdio.h": "c"
-  }
+  },
+  "cmake.sourceDirectory": "D:/Język C/wpsl/ex16"
 }
