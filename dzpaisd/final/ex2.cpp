@@ -23,26 +23,25 @@
 */
 
 #include <iostream>
+#include <cstring> // Dla funkcji memset
+#include <typeinfo> // Dla RTTI (typeid)
 
 using namespace std;
-
 const int DATA_SIZE = 100;
 
+// Klasa BaseData
 class BaseData{
 protected:
     int data[DATA_SIZE];
     int currentPointer;
 
 public:
-    BaseData() : currentPointer(0){
-        for (int i = 0; i < DATA_SIZE; i++)
-        {
-            data[i] = 0;
-        }        
-    };
+    BaseData() : currentPointer(0) {
+        memset(data, 0, sizeof(data));
+    }
 
     virtual void putDate(int dataValue){
-        if(current_exception < DATA_SIZE){
+        if(currentPointer < DATA_SIZE){
             data[currentPointer] = dataValue;
             currentPointer++;
         }
@@ -58,4 +57,63 @@ public:
     };
 
     virtual void printDataType() = 0;
+};
+
+// Klasa CircData
+class CircData : public BaseData {
+public:
+    void putData(int dataIn) override {
+        data[currentPointer] = dataIn;
+        currentPointer = (currentPointer + 1) % DATA_SIZE;
+    }
+
+    void printDataType() override {
+        cout << "Circular data" << endl;
+    }
+};
+
+// Klasa CircData2
+class CircData2 : public CircData {
+public:
+    int* getData(int &ptr) override {
+        ptr = DATA_SIZE;
+        return BaseData::data;
+    }
+
+    int getCurrentPointer() override {
+        return DATA_SIZE;
+    }
+};
+
+// Klasa OneData
+class OneData : public BaseData {
+public:
+    void printDataType() override {
+        cout << "One time data" << endl;
+    }
+
+    void flushBuffer() {
+        memset(data, 0, sizeof(data));
+        currentPointer = 0;
+    }
+};
+
+// Funkcja printData
+void printData(BaseData *ptr) {
+    int pointer;
+    int* dataArray = ptr->getData(pointer);
+
+    cout << "Data: ";
+    for (int i = 0; i < pointer; i++) {
+        cout << dataArray[i] << " ";
+    }
+    cout << endl;
+
+    ptr->printDataType();
+
+    // Sprawdzenie, czy przekazany wskaźnik jest typu OneData i wykonanie flushBuffer()
+    OneData* oneDataPtr = dynamic_cast<OneData*>(ptr);
+    if (oneDataPtr) {
+        oneDataPtr->flushBuffer();
+    }
 }

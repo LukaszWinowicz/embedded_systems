@@ -68,7 +68,8 @@
     "stdio.h": "c",
     "iostream": "cpp",
     "istream": "cpp",
-    "iosfwd": "cpp"
+    "iosfwd": "cpp",
+    "exception": "cpp"
   },
   "cmake.sourceDirectory": "D:/Język C/wpsl/ex16"
 }
