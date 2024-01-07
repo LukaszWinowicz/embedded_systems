@@ -41,6 +41,8 @@ public:
         memset(data, 0, sizeof(data));
     }
 
+    virtual ~BaseData() {}
+
     virtual void putData(int value) {
         if (currentPointer < DATA_SIZE) {
             data[currentPointer] = value;
@@ -71,6 +73,8 @@ public:
     void printDataType() override {
         cout << "Circular data" << endl;
     }
+
+    virtual ~CircData() {}
 };
 
 // Klasa CircData2
@@ -84,6 +88,8 @@ public:
     int getCurrentPointer() override {
         return DATA_SIZE;
     }
+
+    virtual ~CircData2() {}
 };
 
 // Klasa OneData
@@ -97,6 +103,8 @@ public:
         memset(data, 0, sizeof(data));
         currentPointer = 0;
     }
+
+    virtual ~OneData() {}
 };
 
 // Funkcja printData
