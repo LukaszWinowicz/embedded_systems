@@ -17,20 +17,21 @@
  • metodę void flushBuffer() która zeruje tablicę i ustawia currentPointer = 0
 5) Stwórz funkcję void printData(BaseData *ptr) - która powinna wyświetlać pole data[] do aktualnego zapisu. Dodatkowo 
    jeśli przekazanym typem jest oneData po wyświetleniu powinna zostać wykonana metoda flushBuffer()
-6) W funkcji main() stwórz zmienną BaseData *dataptr = nullptr, po kolei dla każdego typu: • Wykonaj dynamiczne lokowanie na określony typ • Kilkukrotnie wykonaj putData
+6) W funkcji main() stwórz zmienną BaseData *dataptr = nullptr, po kolei dla każdego typu: 
+ • Wykonaj dynamiczne lokowanie na określony typ 
+ • Kilkukrotnie wykonaj putData
  • przekaż do printData
-
 */
 
 #include <iostream>
 #include <cstring> // Dla funkcji memset
 #include <typeinfo> // Dla RTTI (typeid)
-
 using namespace std;
+
 const int DATA_SIZE = 100;
 
 // Klasa BaseData
-class BaseData{
+class BaseData {
 protected:
     int data[DATA_SIZE];
     int currentPointer;
@@ -40,21 +41,21 @@ public:
         memset(data, 0, sizeof(data));
     }
 
-    virtual void putDate(int dataValue){
-        if(currentPointer < DATA_SIZE){
-            data[currentPointer] = dataValue;
+    virtual void putData(int value) {
+        if (currentPointer < DATA_SIZE) {
+            data[currentPointer] = value;
             currentPointer++;
         }
-    };
+    }
 
-    virtual int getCurrentPointer(){
+    virtual int getCurrentPointer() {
         return currentPointer;
-    };
+    }
 
     virtual int* getData(int &ptr) {
         ptr = currentPointer;
         return data;
-    };
+    }
 
     virtual void printDataType() = 0;
 };
@@ -116,4 +117,38 @@ void printData(BaseData *ptr) {
     if (oneDataPtr) {
         oneDataPtr->flushBuffer();
     }
+};
+
+int main() {
+
+    BaseData *dataptr = nullptr;
+
+    cout << "==== Test CircData ====" << endl;
+    dataptr = new CircData();
+    for (int i = 0; i < 120; i++) {
+        dataptr->putData(i);
+    }
+    printData(dataptr);
+    delete dataptr;
+    cout << "=============================" << endl << endl;
+
+    cout << "==== Test CircData2 ====" << endl;
+    dataptr = new CircData2();
+    for (int i = 0; i < 50; i++) {
+        dataptr->putData(i);
+    }
+    printData(dataptr);
+    delete dataptr;
+    cout << "===============================" << endl << endl;
+
+    cout << "==== Test OneData ====" << endl;
+    dataptr = new OneData();
+    for (int i = 0; i < 10; i++) {
+        dataptr->putData(i);
+    }
+    printData(dataptr);
+    delete dataptr;
+    cout << "============================" << endl << endl;
+
+    return 0;
 }
