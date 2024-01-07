@@ -26,21 +26,23 @@
 
 using namespace std;
 
+const int DATA_SIZE = 100;
+
 class BaseData{
 protected:
-    int data[100];
+    int data[DATA_SIZE];
     int currentPointer;
 
 public:
     BaseData() : currentPointer(0){
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < DATA_SIZE; i++)
         {
             data[i] = 0;
         }        
     };
 
     virtual void putDate(int dataValue){
-        if(current_exception < 100){
+        if(current_exception < DATA_SIZE){
             data[currentPointer] = dataValue;
             currentPointer++;
         }
