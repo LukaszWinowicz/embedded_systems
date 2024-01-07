@@ -65,7 +65,10 @@
     "rps.h": "c",
     "movement.h": "c",
     "types.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "iostream": "cpp",
+    "istream": "cpp",
+    "iosfwd": "cpp"
   },
   "cmake.sourceDirectory": "D:/Język C/wpsl/ex16"
 }
