@@ -123,32 +123,59 @@ int main() {
 
     BaseData *dataptr = nullptr;
 
-    cout << "==== Test CircData ====" << endl;
+    cout << "======= Test NR 1 CircData (data < " << DATA_SIZE << ") =======" << endl;
     dataptr = new CircData();
     for (int i = 0; i < 120; i++) {
         dataptr->putData(i);
     }
     printData(dataptr);
     delete dataptr;
-    cout << "=============================" << endl << endl;
+    cout << "===============================================" << endl << endl;
 
-    cout << "==== Test CircData2 ====" << endl;
+    cout << "======= Test NR 2 CircData (data > " << DATA_SIZE << ") =======" << endl;
+    dataptr = new CircData();
+    for (int i = 0; i < 50; i++) {
+        dataptr->putData(i);
+    }
+    printData(dataptr);
+    delete dataptr;
+    cout << "===============================================" << endl << endl;
+
+    cout << "======= Test NR 1 CircData2 (data < " << DATA_SIZE << ") =======" << endl;
+    dataptr = new CircData2();
+    for (int i = 0; i < 120; i++) {
+        dataptr->putData(i);
+    }
+    printData(dataptr);
+    delete dataptr;
+    cout << "================================================" << endl << endl;
+
+    cout << "======= Test NR 2 CircData2 (data > " << DATA_SIZE << ") =======" << endl;
     dataptr = new CircData2();
     for (int i = 0; i < 50; i++) {
         dataptr->putData(i);
     }
     printData(dataptr);
     delete dataptr;
-    cout << "===============================" << endl << endl;
-
-    cout << "==== Test OneData ====" << endl;
+    cout << "================================================" << endl << endl;
+    
+    cout << "======= Test NR 1 OneData (data < " << DATA_SIZE << ") =======" << endl;
     dataptr = new OneData();
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 120; i++) {
         dataptr->putData(i);
     }
     printData(dataptr);
     delete dataptr;
-    cout << "============================" << endl << endl;
+    cout << "===============================================" << endl << endl;
+
+    cout << "======= Test NR 2 OneData (data > " << DATA_SIZE << ") =======" << endl;
+    dataptr = new OneData();
+    for (int i = 0; i < 50; i++) {
+        dataptr->putData(i);
+    }
+    printData(dataptr);
+    delete dataptr;
+    cout << "===============================================" << endl << endl;
 
     return 0;
-}
+};

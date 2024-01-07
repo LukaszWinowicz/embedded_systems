@@ -69,7 +69,8 @@
     "iostream": "cpp",
     "istream": "cpp",
     "iosfwd": "cpp",
-    "exception": "cpp"
+    "exception": "cpp",
+    "ostream": "cpp"
   },
   "cmake.sourceDirectory": "D:/Język C/wpsl/ex16"
 }
