@@ -3,5 +3,5 @@
 using namespace std;
 
 void printMessage() {
-    cout << "This is special message!" << endl;
+    cout << "This is special message from MakeFile!" << endl;
 }
