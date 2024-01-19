@@ -1,0 +1,3 @@
+/mnt/d/embedded_systems/oop in c++/ex2/ex2_cmake/CMakeFiles/program.dir
+/mnt/d/embedded_systems/oop in c++/ex2/ex2_cmake/CMakeFiles/edit_cache.dir
+/mnt/d/embedded_systems/oop in c++/ex2/ex2_cmake/CMakeFiles/rebuild_cache.dir
