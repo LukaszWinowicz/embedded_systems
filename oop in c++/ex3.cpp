@@ -37,7 +37,7 @@ int reversedAsString(){
 }
 
 int reverseAsChar(){
-    char word[] = "Warszawa";
+    char word[] = "Łódź";
     int length = strlen(word);
     char reversed[length + 1]; // tutaj uwzględniam pusty znak po ostatniej literze
     cout << word << endl;
@@ -52,7 +52,6 @@ int reverseAsChar(){
 
     return 0;
 }
-
 
 
 int main(){

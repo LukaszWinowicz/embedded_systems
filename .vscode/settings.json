@@ -73,7 +73,8 @@
     "ostream": "cpp",
     "xstring": "cpp",
     "string": "cpp",
-    "xlocale": "cpp"
+    "xlocale": "cpp",
+    "locale": "cpp"
   },
   "cmake.sourceDirectory": "D:/Język C/wpsl/ex16"
 }
