@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/twojprogram.dir/ex16.c.o CMakeFiles/twojprogram.dir/hangman.c.o CMakeFiles/twojprogram.dir/rps.c.o CMakeFiles/twojprogram.dir/movement.c.o -o twojprogram 
