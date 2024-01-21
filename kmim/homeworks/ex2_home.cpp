@@ -22,16 +22,35 @@ Liczba elementów tablicy - n
 #include <ctime>
 using namespace std;
 
+vector<int> numbers;
+
 void message(int threadNum){
     
     // Inicjalizacja generatora liczb losowych
     srand(time(nullptr) + threadNum);
 
-    // Losowanie liczby i wypisanie wiadomości
-    int randomValue = rand() % 101;
+    // Losowanie liczby i wypisanie wiadomości   
+    bool isUnique = true;
 
-    cout << "Wątek " << threadNum << " wylosował wartość: " << randomValue << endl;
+    while (isUnique == false)
+    {
+        int randomValue = (rand() % 5) + 1; // zakres od 1 do 5
 
+        for (int i = 0; i < numbers.size(); i++)
+        {
+            if(numbers[i] == randomValue)
+            {
+                isUnique = false;
+            }
+        }
+
+        if (isUnique == true)
+        {
+            numbers.push_back(randomValue);
+            cout << "Wątek " << threadNum << " wylosował wartość: " << randomValue << endl;
+        }
+        
+    }
 }
 
 int main(){
@@ -44,5 +63,12 @@ int main(){
     thr2.join();
     thr3.join();
     
+    for (int i = 0; i < numbers.size(); i++)
+    {
+        cout << numbers[i] << " | ";
+    }
+    cout << endl;
+    
+
     return 0;
 }
