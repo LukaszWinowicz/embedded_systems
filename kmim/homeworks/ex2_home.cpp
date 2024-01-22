@@ -8,10 +8,10 @@
 */
 
 /*
-1. tworzenie wątków
-2. losowanie liczb w tych wątkach
-3. dodanie możliwości wpisania liczby, która pozwoli nam okreslić liczbę wątków
-4. walidacja wprowadzanej liczby
++1. tworzenie wątków
++2. losowanie liczb w tych wątkach
++3. dodanie możliwości wpisania liczby, która pozwoli nam okreslić liczbę wątków
++4. walidacja wprowadzanej liczby
 5. obsługa błędów
 6. testy
 */
@@ -27,6 +27,7 @@ using namespace std;
 mutex numbers_mutex;
 vector<int> numbers;
 int randomValue; // Współdzielona zmienna
+int n;
 
 void message(int threadNum){
     
@@ -37,7 +38,7 @@ void message(int threadNum){
     while (true)
     {
         lock_guard<mutex> guard(numbers_mutex); // Zapewnienie bezpieczeństwa wątków, blokada mutexu
-        randomValue = (rand() % 2 * threadNum);     
+        randomValue = (rand() % (2 * n));     
         
         if (find(numbers.begin(), numbers.end(), randomValue) == numbers.end()) {
             // Liczba jest unikalna
@@ -60,8 +61,6 @@ bool isValidInput() {
 
 int main(){
     
-    int n;
-
     while (true)
     {
         cout << "Podaj liczbę całkowitą (Z przedziału 2 - 100).\n>> ";
@@ -78,8 +77,27 @@ int main(){
         }
     }
 
-    // ....
+    // wektor wątków
+    vector<thread> threads;
 
+    // wypełnienie wektora wątkami
+    for (int i = 0; i < n; ++i)
+    {
+        threads.push_back(thread(message, i));
+    }
+    
+    // oczekiwanie na zakończenie każdego z wątków
+    // [ ! ]
+    for (auto& th : threads)
+    {
+        th.join();
+    }
+
+    for (int i = 0; i < numbers.size(); i++)
+    {
+        cout << "{" << i + 1 << "} " << numbers[i] << endl;
+    }
+    cout << endl;
 
     return 0;
 }
