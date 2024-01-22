@@ -38,7 +38,7 @@ void message(int threadNum){
     while (true)
     {
         lock_guard<mutex> guard(numbers_mutex); // Zapewnienie bezpieczeństwa wątków, blokada mutexu
-        randomValue = (rand() % (2 * n));     
+        randomValue = (rand() % (2 * n)) + 1;     
         
         if (find(numbers.begin(), numbers.end(), randomValue) == numbers.end()) {
             // Liczba jest unikalna
@@ -63,12 +63,12 @@ int main(){
     
     while (true)
     {
-        cout << "Podaj liczbę całkowitą (Z przedziału 2 - 100).\n>> ";
+        cout << "Podaj liczbę całkowitą (Z przedziału 2 - 20).\n>> ";
         cin >> n;
 
-        if (!isValidInput() || n <= 2 || n >= 100) 
+        if (!isValidInput() || n < 2 || n > 20) 
         {
-            cout << "Nieprawidłowe dane. Proszę podać liczbę całkowitą z zakresu 2-100." << endl;
+            cout << "Nieprawidłowe dane. Proszę podać liczbę całkowitą z zakresu 2-20." << endl;
             cout << "----------------------------------------------------------------" << endl;
         } 
         else 
@@ -76,6 +76,8 @@ int main(){
             break; // Wyjście z pętli, jeśli dane są prawidłowe
         }
     }
+
+    cout << "Zakres losowania od 1 do " << (2*n) << endl;
 
     // wektor wątków
     vector<thread> threads;
