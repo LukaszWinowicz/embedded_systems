@@ -1,10 +1,10 @@
 /*
-Napisz program, który tworzy kilka wątków (co najmniej 2). Każdy
-wątek zapisuje do tablicy wylosowaną liczbę całkowitą i dodaje ją
-do tablicy o ile nie istnieje. Wpisujemy do momentu wypełnienia
-całej tablicy.
-Zakres liczby losowej 0..2n
-Liczba elementów tablicy - n
+    Napisz program, który tworzy kilka wątków (co najmniej 2). Każdy
+    wątek zapisuje do tablicy wylosowaną liczbę całkowitą i dodaje ją
+    do tablicy o ile nie istnieje. Wpisujemy do momentu wypełnienia
+    całej tablicy.
+    Zakres liczby losowej 0..2n
+    Liczba elementów tablicy - n
 */
 
 /*
@@ -26,7 +26,7 @@ Liczba elementów tablicy - n
 using namespace std;
 mutex numbers_mutex;
 vector<int> numbers;
-int counter = 0;
+int randomValue; // Współdzielona zmienna
 
 void message(int threadNum){
     
@@ -34,47 +34,52 @@ void message(int threadNum){
     srand(time(nullptr) + threadNum);
 
     // Losowanie liczby i wypisanie wiadomości   
-
     while (true)
     {
-        int randomValue = (rand() % 10) + 1; // zakres od 1 do 5
-        cout << "Adres w pamięci(" << counter << "): " << &randomValue << "\n" << endl;
-        counter++;
-        lock_guard<mutex> guard(numbers_mutex); // Zapewnienie bezpieczeństwa wątków
+        lock_guard<mutex> guard(numbers_mutex); // Zapewnienie bezpieczeństwa wątków, blokada mutexu
+        randomValue = (rand() % 2 * threadNum);     
         
         if (find(numbers.begin(), numbers.end(), randomValue) == numbers.end()) {
             // Liczba jest unikalna
             numbers.push_back(randomValue);
-            cout << "Wątek " << threadNum << " wylosował wartość: " << randomValue << endl;
             break; // Wyjście z pętli
         }
     }    
 }
 
+bool isValidInput() {
+    if (cin.fail()) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return false;
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    if (cin.gcount() > 1) return false; 
+    return true;
+}
+
 int main(){
     
-    int n = 10;
+    int n;
 
-    // wektor wątków
-    vector<thread> threads;
+    while (true)
+    {
+        cout << "Podaj liczbę całkowitą (Z przedziału 2 - 100).\n>> ";
+        cin >> n;
 
-    // wypełnienie wektora wątkami
-    for (int i = 0; i < n; ++i)
-    {
-        threads.push_back(thread(message, i));
+        if (!isValidInput() || n <= 2 || n >= 100) 
+        {
+            cout << "Nieprawidłowe dane. Proszę podać liczbę całkowitą z zakresu 2-100." << endl;
+            cout << "----------------------------------------------------------------" << endl;
+        } 
+        else 
+        {
+            break; // Wyjście z pętli, jeśli dane są prawidłowe
+        }
     }
-    
-    // oczekiwanie na zakończenie każdego z wątków
-    for (auto& th : threads)
-    {
-        th.join();
-    }
-        
-    for (int i = 0; i < numbers.size(); i++)
-    {
-        cout << numbers[i] << " | ";
-    }
-    cout << endl;
+
+    // ....
+
 
     return 0;
 }
