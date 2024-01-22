@@ -53,20 +53,23 @@ void message(int threadNum){
 
 int main(){
     
-    thread thr1(message, 1); // Przekazanie funkcji i argumentu do wątku
-    thread thr2(message, 2);
-    thread thr3(message, 3);
-    thread thr4(message, 4);
-    thread thr5(message, 5);
-    thread thr6(message, 6);
+    int n = 10;
 
-    thr1.join();
-    thr2.join();
-    thr3.join();
-    thr4.join();
-    thr5.join();
-    thr6.join();
+    // wektor wątków
+    vector<thread> threads;
+
+    // wypełnienie wektora wątkami
+    for (int i = 0; i < n; ++i)
+    {
+        threads.push_back(thread(message, i));
+    }
     
+    // oczekiwanie na zakończenie każdego z wątków
+    for (auto& th : threads)
+    {
+        th.join();
+    }
+        
     for (int i = 0; i < numbers.size(); i++)
     {
         cout << numbers[i] << " | ";
