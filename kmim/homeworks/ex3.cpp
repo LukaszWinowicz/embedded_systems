@@ -3,6 +3,9 @@
 #include <mutex>
 using namespace std;
 mutex mtx;  // Mutex do synchronizacji wypisów na konsolę
+int WINNING_MIN = 10;
+int player1Score = 0;
+int player2Score = 0;
 
 enum class Choose { Papier = 1, Kamien = 2, Nozyce = 3 };
 
@@ -26,19 +29,25 @@ void playerFunction(int playerNumber) {
     srand(time(nullptr) + playerNumber);
     Choose wyborGracza = losujWybor();
     cout << "Gracz "<< playerNumber << " wybrał: " << wyborNaString(wyborGracza) << endl;
-
+    player1Score++;
 
 }
 
 int main() {
-    thread player1(playerFunction, 1);
-    thread player2(playerFunction, 2);
+  
 
+    while (player1Score < WINNING_MIN && player2Score < WINNING_MIN)
+    {
+        thread player1(playerFunction, 1);
+        thread player2(playerFunction, 2);
+
+        // Oczekiwanie na zakończenie wątków
+        player1.join();
+        player2.join();
+    }
     
 
-    // Oczekiwanie na zakończenie wątków
-    player1.join();
-    player2.join();
+    
 
     return 0;
 }
