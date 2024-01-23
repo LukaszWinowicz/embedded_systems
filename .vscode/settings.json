@@ -120,7 +120,8 @@
     "xtr1common": "cpp",
     "xutility": "cpp",
     "thread": "cpp",
-    "mutex": "cpp"
+    "mutex": "cpp",
+    "random": "cpp"
   },
   "cmake.sourceDirectory": "D:/Język C/wpsl/ex16"
 }
