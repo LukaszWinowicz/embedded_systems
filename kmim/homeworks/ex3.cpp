@@ -2,49 +2,41 @@
 #include <thread>
 #include <mutex>
 using namespace std;
+
 mutex mtx;  // Mutex do synchronizacji wypisów na konsolę
 int WINNING_MIN = 10;
 int player1Score = 0;
 int player2Score = 0;
 
-enum class Choose { Papier = 1, Kamien = 2, Nozyce = 3 };
-
-Choose losujWybor() {
-    return static_cast<Choose>(rand() % 3 + 1);
-}
-
-string wyborNaString(Choose wybor) {
-    switch (wybor) {
-        case Choose::Papier: return "Papier";
-        case Choose::Kamien: return "Kamien";
-        case Choose::Nozyce: return "Nozyce";
-        default: return "Nieznany";
-    }
-}
-
-void playerFunction(int playerNumber) {
-    
-    // Inicjalizacja generatora liczb losowych
-    unique_lock<std::mutex> lock(mtx);
+int playerFunction(int playerNumber){
+  // Inicjalizacja generatora liczb losowych
     srand(time(nullptr) + playerNumber);
-    Choose wyborGracza = losujWybor();
-    cout << "Gracz "<< playerNumber << " wybrał: " << wyborNaString(wyborGracza) << endl;
-    player1Score++;
 
+    lock_guard<mutex> lock(mtx);
+    int playerChoose = rand() % 3 + 1;
+
+    return playerChoose;
+  
 }
+
+
 
 int main() {
   
 
-    while (player1Score < WINNING_MIN && player2Score < WINNING_MIN)
-    {
+    //while (player1Score < WINNING_MIN && player2Score < WINNING_MIN)
+    //{
         thread player1(playerFunction, 1);
         thread player2(playerFunction, 2);
+
+        // 1 - papier, 2 kamień, 3 - nożyce
+        
+cout << "Gracz 1 " << player1.playerChoose() << endl;
 
         // Oczekiwanie na zakończenie wątków
         player1.join();
         player2.join();
-    }
+   // }
     
 
     

@@ -7,14 +7,6 @@
     Liczba elementów tablicy - n
 */
 
-/*
-+1. tworzenie wątków
-+2. losowanie liczb w tych wątkach
-+3. dodanie możliwości wpisania liczby, która pozwoli nam okreslić liczbę wątków
-+4. walidacja wprowadzanej liczby
-5. obsługa błędów
-6. testy
-*/
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -29,7 +21,7 @@ vector<int> numbers;
 int randomValue; // Współdzielona zmienna
 int n;
 
-void message(int threadNum){
+void draw(int threadNum){
     
     // Inicjalizacja generatora liczb losowych
     srand(time(nullptr) + threadNum);
@@ -85,7 +77,7 @@ int main(){
     // wypełnienie wektora wątkami
     for (int i = 0; i < n; ++i)
     {
-        threads.push_back(thread(message, i));
+        threads.push_back(thread(draw, i));
     }
     
     // oczekiwanie na zakończenie każdego z wątków
