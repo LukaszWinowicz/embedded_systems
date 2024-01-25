@@ -45,6 +45,9 @@ int main() {
     while (player1Score < WINNING_MIN && player2Score < WINNING_MIN){
 
         cout << "Rundę zaczyna gracz: " << startingPlayer << endl;
+        cout << "Wynik gracza 1: " << player1Score << endl;
+        cout << "Wynik gracza 2: " << player2Score << endl;     
+
         if (startingPlayer == 1) {
             thread player1(player, 1, ref(player1Choose));
             thread player2(player, 2, ref(player2Choose));
@@ -59,23 +62,27 @@ int main() {
         }
 
         if (player1Choose == player2Choose) {
-            cout << "REMIS" << endl;
+            cout << ">> REMIS" << endl;
         } else if ((player1Choose == 1 && player2Choose == 3) ||
                 (player1Choose == 2 && player2Choose == 1) ||
                 (player1Choose == 3 && player2Choose == 2)) {
-            cout << "WYGRAŁ GRACZ 1" << endl;
+            cout << ">> WYGRAŁ GRACZ 1" << endl;
             player1Score++;
             startingPlayer = 2;
         } else {
-            cout << "WYGRAŁ GRACZ 2" << endl;
+            cout << ">> WYGRAŁ GRACZ 2" << endl;
             player2Score++;
             startingPlayer = 1;
         }
+           cout << " ------------------------------ " << endl;
 
     }
 
+    cout << "--- OSTATECZNE WYNIKI ---" << endl;
     cout << "Wynik gracza 1: " << player1Score << endl;
-    cout << "Wynik gracza 2: " << player2Score << endl;
+    cout << "Wynik gracza 2: " << player2Score << endl;     
+
+    
 
 
     return 0;
