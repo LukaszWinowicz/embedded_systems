@@ -22,6 +22,7 @@ int player2Score = 0;
 int player1Choose = 0;
 int player2Choose = 0;
 int startingPlayer = 1;
+int WINNING_MIN = 10;
 mutex mtx;
 
 void player(int playerNumber, int &playerChoice) {
@@ -34,15 +35,16 @@ void player(int playerNumber, int &playerChoice) {
 
     playerChoice = dis(gen);    
 
-    cout << "Gracz " << playerNumber << " wybrał: " << playerChoice << endl;
+    //cout << "Gracz " << playerNumber << " wybrał: " << playerChoice << endl;
 }
 
 
 int main() {
     
 
-    for (int i = 0; i < 10; i++) {
+    while (player1Score < WINNING_MIN && player2Score < WINNING_MIN){
 
+        cout << "Rundę zaczyna gracz: " << startingPlayer << endl;
         if (startingPlayer == 1) {
             thread player1(player, 1, ref(player1Choose));
             thread player2(player, 2, ref(player2Choose));
@@ -63,15 +65,18 @@ int main() {
                 (player1Choose == 3 && player2Choose == 2)) {
             cout << "WYGRAŁ GRACZ 1" << endl;
             player1Score++;
+            startingPlayer = 2;
         } else {
             cout << "WYGRAŁ GRACZ 2" << endl;
             player2Score++;
+            startingPlayer = 1;
         }
 
-        
-
-        
     }
+
+    cout << "Wynik gracza 1: " << player1Score << endl;
+    cout << "Wynik gracza 2: " << player2Score << endl;
+
 
     return 0;
 }
