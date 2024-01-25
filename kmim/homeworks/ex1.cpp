@@ -1,24 +1,33 @@
+/*
+Napisz program, który tworzy 2n procesów.
+Każdy nowo utworzony proces przekazuje swój PID oraz PID rodzica do wątku głównego.
+Każdy wątek powinien informować co robi, tzn że został uruchomiony, 
+utworzył potomka, przekazał informację itp.
+*/
+
 #include <iostream>
 #include <unistd.h>
 #include <sys/wait.h>
+using namespace std;
+
 
 void child(int n) {
   // Informujemy, że proces został uruchomiony
-  std::cout << "Proces potomny " << n << " został uruchomiony\n";
+  cout << "Proces potomny " << n << " został uruchomiony\n";
 
   // Informujemy, że proces przekazuje informację do wątku głównego
-  std::cout << "Proces potomny " << n << " przekazuje informację do wątku głównego\n";
+  cout << "Proces potomny " << n << " przekazuje informację do wątku głównego\n";
 
   // Przekazujemy swój PID oraz PID rodzica do wątku głównego
-  std::cout << "Proces potomny " << n << " przekazuje PID: " << getpid() << ", PID rodzica: " << getppid() << "\n";
+  cout << "Proces potomny " << n << " przekazuje PID: " << getpid() << ", PID rodzica: " << getppid() << "\n";
 }
 
 int main() {
   // Informujemy, że wątek główny został uruchomiony
-  std::cout << "Wątek główny został uruchomiony\n";
+  cout << "Wątek główny został uruchomiony\n";
   int n = 2;
-  // Tworzymy 2n procesów
-  for (int i = 0; i < 2 * n; i++) {
+  // Tworzymy 2n procesóws
+  for (int i = 1; i <= 2 * n; i++) {
     if (fork() == 0) {
       // Uruchamiamy funkcję child() w procesie potomnym
       child(i);
@@ -27,13 +36,13 @@ int main() {
   }
 
   // Informujemy, że wątek główny czeka na zakończenie procesów potomnych
-  std::cout << "Wątek główny czeka na zakończenie procesów potomnych\n";
+  cout << "Wątek główny czeka na zakończenie procesów potomnych\n";
 
   // Czekamy na zakończenie procesów potomnych
   while (wait(NULL) > 0);
 
   // Informujemy, że wątek główny został zakończony
-  std::cout << "Wątek główny został zakończony\n";
+  cout << "Wątek główny został zakończony\n";
 
   return 0;
 }

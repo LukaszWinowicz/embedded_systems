@@ -122,7 +122,16 @@
     "thread": "cpp",
     "mutex": "cpp",
     "random": "cpp",
-    "future": "cpp"
+    "future": "cpp",
+    "condition_variable": "cpp",
+    "coroutine": "cpp",
+    "resumable": "cpp",
+    "functional": "cpp",
+    "list": "cpp",
+    "ratio": "cpp",
+    "stop_token": "cpp",
+    "unordered_map": "cpp",
+    "xhash": "cpp"
   },
   "cmake.sourceDirectory": "D:/Język C/wpsl/ex16"
 }
