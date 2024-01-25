@@ -121,7 +121,8 @@
     "xutility": "cpp",
     "thread": "cpp",
     "mutex": "cpp",
-    "random": "cpp"
+    "random": "cpp",
+    "future": "cpp"
   },
   "cmake.sourceDirectory": "D:/Język C/wpsl/ex16"
 }
