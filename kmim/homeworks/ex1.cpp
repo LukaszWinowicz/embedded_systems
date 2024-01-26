@@ -1,8 +1,8 @@
 /*
-Napisz program, który tworzy 2n procesów.
-Każdy nowo utworzony proces przekazuje swój PID oraz PID rodzica do wątku głównego.
-Każdy wątek powinien informować co robi, tzn że został uruchomiony, 
-utworzył potomka, przekazał informację itp.
+  Napisz program, który tworzy 2n procesów.
+  Każdy nowo utworzony proces przekazuje swój PID oraz PID rodzica do wątku głównego.
+  Każdy wątek powinien informować co robi, tzn że został uruchomiony, 
+  utworzył potomka, przekazał informację itp.
 */
 
 #include <iostream>
