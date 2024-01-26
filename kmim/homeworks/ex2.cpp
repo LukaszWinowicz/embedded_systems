@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <mutex>
+#include <algorithm>
  
 using namespace std;
 mutex numbers_mutex;
@@ -79,13 +80,11 @@ int main(){
         threads.push_back(thread(draw, i));
     }
     
-    // oczekiwanie na zakończenie każdego z wątków
-    // [ ! ]
-    for (auto& th : threads)
+    for (int i = 0; i < n; ++i)
     {
-        th.join();
+        threads[i].join();
     }
-
+    
     for (int i = 0; i < numbers.size(); i++)
     {
         cout << "{" << i + 1 << "} " << numbers[i] << endl;
