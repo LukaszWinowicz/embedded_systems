@@ -13,8 +13,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <mutex>
-#include <algorithm>
-
+ 
 using namespace std;
 mutex numbers_mutex;
 vector<int> numbers;
