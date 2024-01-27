@@ -19,7 +19,7 @@ using namespace std;
 mutex numbers_mutex;
 vector<int> numbers;
 int randomValue; // Współdzielona zmienna
-int n;
+string n;
 
 void draw(int threadNum){
     
@@ -30,7 +30,7 @@ void draw(int threadNum){
     while (true)
     {
         lock_guard<mutex> guard(numbers_mutex); // Zapewnienie bezpieczeństwa wątków, blokada mutexu
-        randomValue = (rand() % (2 * n)) + 1;     
+        randomValue = (rand() % (2 * stoi(n))) + 1;     
         
         if (find(numbers.begin(), numbers.end(), randomValue) == numbers.end()) {
             // Liczba jest unikalna
@@ -40,15 +40,21 @@ void draw(int threadNum){
     }    
 }
 
-bool isValidInput() {
-    if (cin.fail()) {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+bool isNumericInRange(const string& str) {
+    if (str.empty()) {
         return false;
     }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    if (cin.gcount() > 1) return false; 
-    return true;
+
+    // Sprawdzenie, czy wszystkie znaki to cyfry
+    for (char c : str) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+
+    // Konwersja stringa na liczbę i sprawdzenie zakresu
+    int value = stoi(str);
+    return value >= 2 && value <= 10;
 }
 
 int main(){
@@ -58,7 +64,7 @@ int main(){
         cout << "Podaj liczbę całkowitą (Z przedziału 2 - 20).\n>> ";
         cin >> n;
 
-        if (!isValidInput() || n < 2 || n > 20) 
+        if (!isNumericInRange(n)) 
         {
             cout << "Nieprawidłowe dane. Proszę podać liczbę całkowitą z zakresu 2-20." << endl;
             cout << "----------------------------------------------------------------" << endl;
@@ -69,18 +75,18 @@ int main(){
         }
     }
 
-    cout << "Zakres losowania od 1 do " << (2*n) << endl;
+    cout << "Zakres losowania od 1 do " << (2* stoi(n)) << endl;
 
     // wektor wątków
     vector<thread> threads;
 
     // wypełnienie wektora wątkami
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < stoi(n); ++i)
     {
         threads.push_back(thread(draw, i));
     }
     
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < stoi(n); ++i)
     {
         threads[i].join();
     }

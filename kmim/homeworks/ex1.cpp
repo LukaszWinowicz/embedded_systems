@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <limits>
+#include <string>
 
 using namespace std;
 
@@ -20,26 +21,32 @@ void child(int n) {
   cout << "Proces potomny " << n << " przekazuje PID: " << getpid() << ", PID rodzica: " << getppid() << "\n";
 }
 
-bool isValidInput() {
-    if (cin.fail()) {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+bool isNumericInRange(const string& str) {
+    if (str.empty()) {
         return false;
     }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    if (cin.gcount() > 1) return false; 
-    return true;
+
+    // Sprawdzenie, czy wszystkie znaki to cyfry
+    for (char c : str) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+
+    // Konwersja stringa na liczbę i sprawdzenie zakresu
+    int value = stoi(str);
+    return value >= 2 && value <= 10;
 }
 
 int main() {
 
-  int n = 0;
+  string n = "0";
   while (true)
     {
         cout << "Podaj liczbę całkowitą (Z przedziału 2 - 20).\n>> ";
         cin >> n;
 
-        if (!isValidInput() || n < 2 || n > 20) 
+        if (!isNumericInRange(n)) 
         {
             cout << "Nieprawidłowe dane. Proszę podać liczbę całkowitą z zakresu 2-20." << endl;
             cout << "----------------------------------------------------------------" << endl;
@@ -53,7 +60,7 @@ int main() {
   cout << "Wątek główny został uruchomiony\n";
  
   // Utowrzenie 2n procesów
-  for (int i = 1; i <= 2 * n; i++) {
+  for (int i = 1; i <= 2 * stoi(n); i++) {
     if (fork() == 0) {
       // Uruchoamienie funkcji child() w procesie potomnym
       child(i);
